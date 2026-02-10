@@ -66,9 +66,7 @@ Generating trajectory with 100 steps...
 Saved to data/trajectory.txt
 ```
 
-``` {.bash org-language="sh"}
-head -n 3 data/trajectory.txt
-```
+    head -n 3 data/trajectory.txt
 
 This script uses only **Built-in** modules (`random`{.verbatim},
 `pathlib`{.verbatim}). You can send this file to anyone with Python
@@ -137,7 +135,7 @@ read this header and automatically set up the environment for you.
 
 We can add a special comment block at the top of our script:
 
-``` {.python tangle="data/generate_data_np_uv.py" results="none"}
+``` {.python tangle="data/generate_data_np_uv.py"}
 # /// script
 # requires-python = ">=3.11"
 # dependencies = [
@@ -154,7 +152,7 @@ print("Hello I don't crash anymore..")
 Now, instead of manually installing `numpy`{.verbatim}, you run the
 script using `uv`{.verbatim}:
 
-``` {.bash org-language="sh" wrap="src sh"}
+``` bash
 uv run data/generate_data_np_uv.py
 ```
 

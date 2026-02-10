@@ -66,7 +66,7 @@ Generating trajectory with 100 steps...
 Saved to data/trajectory.txt
 #+end_src
 
-#+begin_src sh
+#+begin_src
 head -n 3 data/trajectory.txt
 #+end_src
 
@@ -135,7 +135,7 @@ can read this header and automatically set up the environment for you.
 
 We can add a special comment block at the top of our script:
 
-#+begin_src python :tangle data/generate_data_np_uv.py :results none
+#+begin_src python :tangle data/generate_data_np_uv.py
 # /// script
 # requires-python = ">=3.11"
 # dependencies = [
@@ -151,12 +151,12 @@ print("Hello I don't crash anymore..")
 
 Now, instead of manually installing =numpy=, you run the script using =uv=:
 
-#+begin_src sh :wrap src sh
+#+begin_src bash
 uv run data/generate_data_np_uv.py
 #+end_src
 
 #+RESULTS:
-#+begin_src sh
+#+begin_src bash
 Hello I don't crash anymore..
 #+end_src
 
