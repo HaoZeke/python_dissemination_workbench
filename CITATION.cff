@@ -18,7 +18,7 @@ authors:
     affiliation: EPFL
     orcid: https://orcid.org/0000-0002-2393-8056
 repository-code: 'https://github.com/HaoZeke/python_packaging_workbench'
-url: 'https://haozeke.github.io/python_packaging_workbench/'
+url: 'https://pydissem.rgoswami.me'
 abstract: >-
   Crash course for novice Python users to effectively build and share python
   packages and scripts.
