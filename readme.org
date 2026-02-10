@@ -1,0 +1,16 @@
+* Python Dissemination Lesson
+
+A lesson on the dissemination of Python code as scripts and packages,
+implemented using the [[https://carpentries.github.io/sandpaper-docs/][The Carpentries Workbench]], sourced from org-mode files.
+
+# TODO(rg): setup a complete post on the org-mode stuff, currently just a snippet
+
+#+begin_src bash
+# setup locally
+gh repo clone HaoZeke/python_packaging_workbench
+cd python_packaging_workbench
+pixi s
+# serve locally
+Rscript -e 'sandpaper::serve()'
+#+end_src
+
