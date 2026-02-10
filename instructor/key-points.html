@@ -245,7 +245,19 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="introduction.html">1. Using Markdown</a>
+        <a href="python_scripts.html">1. Writing Reproducible Python</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush3">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading3">
+        <a href="modules.html">2. Modules, Packages, and The Search Path</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -309,17 +321,30 @@
     <main id="main-content" class="main-content"><div class="container lesson-content">
         
         
-<section id="introduction"><h2 class="section-heading"><a href="introduction.html">Using Markdown</a></h2>
+<section id="python_scripts"><h2 class="section-heading"><a href="python_scripts.html">Writing Reproducible Python</a></h2>
 <hr class="half-width">
 <ul>
-<li>Use <code class="verbatim">.md</code> files for episodes when you
-want static content</li>
-<li>Use <code class="verbatim">.Rmd</code> files for episodes when you
-need to generate output</li>
-<li>Run <code class="verbatim">sandpaper::check_lesson()</code> to
-identify any issues with your lesson</li>
-<li>Run <code class="verbatim">sandpaper::build_lesson()</code> to
-preview your lesson locally</li>
+<li>
+<strong>PEP 723</strong> allows inline metadata for Python
+dependencies.</li>
+<li>Use <strong>uv</strong> to run single-file scripts with pure Python
+requirements (<code class="verbatim">numpy</code>, <code class="verbatim">pandas</code>).</li>
+<li>Use <strong>Pixi</strong> when your script depends on system
+libraries or compiled binaries (<code class="verbatim">eonclient</code>,
+<code class="verbatim">ffmpeg</code>).</li>
+<li>Combine them with a <strong>Pixibang</strong> (<code class="verbatim">pixi exec ... -- uv run</code>) for fully reproducible,
+complex scientific workflows.</li>
+</ul></section><section id="modules"><h2 class="section-heading"><a href="modules.html">Modules, Packages, and The Search Path</a></h2>
+<hr class="half-width">
+<ul>
+<li>
+<code class="verbatim">sys.path</code> is the list of directories
+Python searches for imports.</li>
+<li>The order of search is: Current Directory -&gt; Standard Library
+-&gt; Installed Packages.</li>
+<li>A <strong>Package</strong> is a directory containing an <code class="verbatim">__init__.py</code> file.</li>
+<li>Code that works locally because of the current directory will fail
+when shared unless properly installed.</li>
 </ul></section>
 </div>
     </main>

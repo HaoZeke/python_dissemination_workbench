@@ -244,7 +244,19 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="introduction.html">1. Using Markdown</a>
+        <a href="python_scripts.html">1. Writing Reproducible Python</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush3">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading3">
+        <a href="modules.html">2. Modules, Packages, and The Search Path</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -307,11 +319,11 @@
     <main id="main-content" class="main-content"><div class="container lesson-content">
         
         
-<section id="aio-introduction"><p>Content from <a href="introduction.html">Using Markdown</a></p>
+<section id="aio-python_scripts"><p>Content from <a href="python_scripts.html">Writing Reproducible Python</a></p>
 <hr>
 <p>Last updated on 2026-02-10 |
 
-        <a href="https://github.com/HaoZeke/python_packaging_workbench/edit/main/episodes/introduction.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+        <a href="https://github.com/HaoZeke/python_packaging_workbench/edit/main/episodes/python_scripts.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
@@ -323,7 +335,10 @@
 <div class="inner">
 <h3 class="card-title">Questions</h3>
 <ul>
-<li>How do you write a lesson using Markdown and <a href="https://carpentries.github.io/sandpaper/" class="external-link">sandpaper</a>?</li>
+<li>What is the difference between the standard library and third-party
+packages?</li>
+<li>How do I share a script so that it runs on someone else’s
+computer?</li>
 </ul>
 </div>
 </div>
@@ -333,77 +348,370 @@
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
 <ul>
-<li>Explain how to use markdown with The Carpentries Workbench</li>
-<li>Demonstrate how to include pieces of code, figures, and nested
-challenge blocks</li>
+<li>Import and use the <code class="verbatim">pathlib</code> standard
+library.</li>
+<li>Identify when a script requires external dependencies (like <code class="verbatim">numpy</code>).</li>
+<li>Write a self-contained script that declares its own dependencies
+using inline metadata.</li>
+<li>Share a script which reproducibly handles <code class="verbatim">conda</code> dependencies alongside Python.</li>
 </ul>
 </div>
 </div>
 </div>
 </div>
 </div>
-<section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+<section><h2 class="section-heading" id="the-humble-script">The Humble Script<a class="anchor" aria-label="anchor" href="#the-humble-script"></a>
 </h2>
 <hr class="half-width">
-<p>This is a lesson created via The Carpentries Workbench. It is written
-in <a href="https://pandoc.org/MANUAL.html" class="external-link">Pandoc-flavored Markdown</a>
-for static files and <span class="math display">\[r-markdown\]</span>
-for dynamic files that can render code into output. Please refer to the
-<a href="https://carpentries.github.io/sandpaper-docs/" class="external-link">Introduction to
-The Carpentries Workbench</a> for full documentation.</p>
-<p>What you need to know is that there are three sections required for a
-valid Carpentries lesson:</p>
-<ol style="list-style-type: decimal">
-<li>
-<code class="verbatim">questions</code> are displayed at the
-beginning of the episode to prime the learner for the content.</li>
-<li>
-<code class="verbatim">objectives</code> are the learning objectives
-for an episode displayed with the questions.</li>
-<li>
-<code class="verbatim">keypoints</code> are displayed at the end of
-the episode to reinforce the objectives.</li>
-</ol>
-<div id="challenge-1-can-you-do-it" class="callout challenge">
+<p>Most research software starts as a single file. You have some data,
+you need to analyze it, and you write a sequence of commands to get the
+job done.</p>
+<p>Let’s start by creating a script that generates some data and saves
+it. We will use the standard library module <code class="verbatim">pathlib</code> to handle file paths safely across
+operating systems (Windows/macOS/Linux).</p>
+<div class="codewrapper sourceCode" id="cb1" tangle="data/generate_data.py">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># Define output directory</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>DATA_DIR <span class="op">=</span> Path(<span class="st">"data"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>DATA_DIR.mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="kw">def</span> generate_trajectory(n_steps<span class="op">=</span><span class="dv">100</span>):</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Generating trajectory with </span><span class="sc">{</span>n_steps<span class="sc">}</span><span class="ss"> steps..."</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>    path <span class="op">=</span> [<span class="fl">0.0</span>]</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_steps):</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>        <span class="co"># Random walk step</span></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>        step <span class="op">=</span> random.uniform(<span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>        path.append(path[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> step)</span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>    <span class="cf">return</span> path</span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>    traj <span class="op">=</span> generate_trajectory()</span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>    output_file <span class="op">=</span> DATA_DIR <span class="op">/</span> <span class="st">"trajectory.txt"</span></span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(output_file, <span class="st">"w"</span>) <span class="im">as</span> f:</span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>        <span class="cf">for</span> point <span class="kw">in</span> traj:</span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a>            f.write(<span class="ss">f"</span><span class="sc">{</span>point<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Saved to </span><span class="sc">{</span>output_file<span class="sc">}</span><span class="ss">"</span>)</span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb2">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>Generating trajectory <span class="cf">with</span> <span class="dv">100</span> steps...</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>Saved to data<span class="op">/</span>trajectory.txt</span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb3">
+<h3 class="code-label">SH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode sh" tabindex="0"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 3 data/trajectory.txt</span></code></pre>
+</div>
+<p>This script uses only <strong>Built-in</strong> modules (<code class="verbatim">random</code>, <code class="verbatim">pathlib</code>).
+You can send this file to anyone with Python installed, and it will
+run.</p>
+<div class="section level3">
+<h3 id="the-need-for-external-libraries">The Need for External Libraries<a class="anchor" aria-label="anchor" href="#the-need-for-external-libraries"></a>
+</h3>
+<p>Standard Python is powerful, but for scientific work, we almost
+always need the “Scientific Stack”: <code class="verbatim">numpy</code>,
+<code class="verbatim">pandas/polars</code>, or <code class="verbatim">matplotlib</code>.</p>
+<p>Let’s modify our script to calculate statistics using <code class="verbatim">numpy</code>.</p>
+<div class="codewrapper sourceCode" id="cb4" tangle="data/generate_data_np.py">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np <span class="co"># new dependency!!</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>DATA_DIR <span class="op">=</span> Path(<span class="st">"data"</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>DATA_DIR.mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="kw">def</span> generate_trajectory(n_steps<span class="op">=</span><span class="dv">100</span>):</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>    <span class="co"># Use numpy for efficient array generation</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>    steps <span class="op">=</span> np.random.uniform(<span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>, n_steps)</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    trajectory <span class="op">=</span> np.cumsum(steps)</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>    <span class="cf">return</span> trajectory</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>    traj <span class="op">=</span> generate_trajectory()</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Mean position: </span><span class="sc">{</span>np<span class="sc">.</span>mean(traj)<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Std Dev: </span><span class="sc">{</span>np<span class="sc">.</span>std(traj)<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre>
+</div>
+<div id="the-dependency-problem" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <span class="callout-header">Challenge</span>
-<div id="challenge-1-can-you-do-it" class="callout-inner">
-<h3 class="callout-title">Challenge 1: Can you do it?</h3>
+<div id="the-dependency-problem" class="callout-inner">
+<h3 class="callout-title">The Dependency Problem</h3>
 <div class="callout-content">
-<p>What is the output of this command?</p>
-<div class="codewrapper sourceCode" id="cb1">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">paste</span><span class="op">(</span><span class="st">"This"</span>, <span class="st">"new"</span>, <span class="st">"lesson"</span>, <span class="st">"looks"</span>, <span class="st">"good"</span><span class="op">)</span></span></code></pre>
-</div>
+<p>If you send this updated file to a colleague who just installed
+Python, what happens when they run it?</p>
 </div>
 </div>
 </div>
 <div id="accordionSolution1" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
-  <h4 class="accordion-header" id="headingSolution1"> Output </h4>
+  <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
 <div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
-<pre class="example"><code>[1] "This new lesson looks good"</code></pre>
+<p><strong>It crashes.</strong></p>
+<div class="codewrapper sourceCode" id="cb5">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="pp">ModuleNotFoundError</span>: No module named <span class="st">'numpy'</span></span></code></pre>
+</div>
+<p>Your colleague now has to figure out how to install <code class="verbatim">numpy</code>. Do they use <code class="verbatim">pip</code>? <code class="verbatim">conda</code>? What
+version? This is the start of “Dependency Hell.”</p>
 </div>
 </div>
 </div>
 </div>
-<div id="challenge-2-how-do-you-nest-solutions-within-challenge-blocks" class="callout challenge">
+</div>
+</section><section><h2 class="section-heading" id="the-modern-solution-pep-723-metadata">The Modern Solution: PEP 723 Metadata<a class="anchor" aria-label="anchor" href="#the-modern-solution-pep-723-metadata"></a>
+</h2>
+<hr class="half-width">
+<p>Traditionally, you would send a <code class="verbatim">requirements.txt</code> file alongside your script, or
+leave comments in the script, or try to add documentation in an
+email.</p>
+<p>But files get separated, and versions get desynchronized.</p>
+<p><a href="https://peps.python.org/pep-0723/" class="external-link"><strong>PEP
+723</strong></a> is a Python standard that allows you to embed
+dependency information directly into the script file. Tools like <code class="verbatim">uv</code> (a fast Python package manager) can read this
+header and automatically set up the environment for you.</p>
+<p>We can add a special comment block at the top of our script:</p>
+<div class="codewrapper sourceCode" id="cb6" tangle="data/generate_data_np_uv.py">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># /// script</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co"># requires-python = "&gt;=3.11"</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co"># dependencies = [</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#     "numpy",</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co"># ]</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co"># ///</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Hello I don't crash anymore.."</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co"># ... rest of script ...</span></span></code></pre>
+</div>
+<p>Now, instead of manually installing <code class="verbatim">numpy</code>, you run the script using <code class="verbatim">uv</code>:</p>
+<div class="codewrapper sourceCode" id="cb7">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="ex">uv</span> run data/generate_data_np_uv.py</span></code></pre>
+</div>
+<p>When you run this command:</p>
+<ol style="list-style-type: decimal">
+<li>
+<code class="verbatim">uv</code> reads the metadata block.</li>
+<li>It creates a temporary, isolated virtual environment.</li>
+<li>It installs the specified version of <code class="verbatim">numpy</code>.</li>
+<li>It executes the script.</li>
+</ol>
+<p>This guarantees that anyone with <code class="verbatim">uv</code>
+installed can run your script immediately, without messing up their own
+python environments.</p>
+</section><section><h2 class="section-heading" id="beyond-python-the-pixibang">Beyond Python: The <code class="verbatim">pixibang</code>
+<a class="anchor" aria-label="anchor" href="#beyond-python-the-pixibang"></a>
+</h2>
+<hr class="half-width">
+<p>PEP 723 is fantastic for installable Python packages [fn:: most often
+this means things you can find on <a href="https://pypi.org/" class="external-link">PyPI</a>).</p>
+<p>However, for scientific software, we often rely on compiled binaries
+and libraries that are not Python packages—things like <code class="verbatim">LAMMPS</code>, <code class="verbatim">GROMACS</code>,
+or <strong>eOn</strong> <a href="https://eondocs.org" class="external-link">a server-client
+tool</a> for exploring the potential energy surfaces of atomistic
+systems.</p>
+<p>If your script needs to run a C++ binary, <code class="verbatim">pip</code> and <code class="verbatim">uv</code> cannot
+help you easily. This is where <strong>pixi</strong> comes in.</p>
+<p><a href="https://pixi.sh/" class="external-link"><code>pixi</code> is a package manager</a>
+built on the <code class="verbatim">conda</code> ecosystem. It can
+install Python packages <strong>and</strong> compiled binaries. We can
+use a <a href="https://rgoswami.me/snippets/pixi-shebang-ghcoauth/" class="external-link">“pixibang”
+script</a> to effectively replicate the PEP 723 experience, but for the
+entire system stack.</p>
+<div class="section level3">
+<h3 id="example-running-minimizations-with-eon-and-pet-mad">Example: Running minimizations with eOn and PET-MAD<a class="anchor" aria-label="anchor" href="#example-running-minimizations-with-eon-and-pet-mad"></a>
+</h3>
+<p>Let’s write a script that drives a geometry minimization <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. This
+requires:</p>
+<dl>
+<dt><a href="https://docs.metatensor.org/metatrain/latest/index.html" class="external-link"><strong>Metatrain/Torch</strong></a></dt>
+<dd>
+For the machine learning potential.
+</dd>
+<dt><a href="http://rgpycrumbs.rgoswami.me/" class="external-link"><strong>rgpycrumbs</strong></a></dt>
+<dd>
+For helper utilities.
+</dd>
+<dt><a href="https://eondocs.org" class="external-link"><strong>eOn Client</strong></a></dt>
+<dd>
+The compiled C++ binary that actually performs the minimization.
+</dd>
+</dl>
+<p>First, we need to create the input geometry file <code class="verbatim">pos.con</code> in our directory:</p>
+<div class="codewrapper sourceCode" id="cb8">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&lt;&lt; 'EOF'</span> <span class="op">&gt;</span> pos.con</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="st">Generated by ASE</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="st">preBox_header_2</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="st">25.00   25.00   25.00</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="st">90.00   90.00   90.00</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="st">postBox_header_1</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="st">postBox_header_2</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="st">4</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="st">2 1 2 4</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="st">12.01 16.00 14.01 1.01</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="st">C</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="st">Coordinates of Component 1</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="st">  11.04   11.77   12.50 0    0</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="st">  12.03   10.88   12.50 0    1</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="st">O</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="st">Coordinates of Component 2</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="st">  14.41   13.15   12.44 0    2</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="st">N</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="st">Coordinates of Component 3</span></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="st">  13.44   13.86   12.46 0    3</span></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a><span class="st">  12.50   14.51   12.49 0    4</span></span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a><span class="st">H</span></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a><span class="st">Coordinates of Component 4</span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="st">  10.64   12.19   13.43 0    5</span></span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="st">  10.59   12.14   11.58 0    6</span></span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="st">  12.49   10.52   13.42 0    7</span></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="st">  12.45   10.49   11.57 0    8</span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a><span class="op">EOF</span></span></code></pre>
+</div>
+<p>Now, create the script <code class="verbatim">eon_min.py</code>. Note
+the shebang line!</p>
+<div class="codewrapper sourceCode" id="cb9" tangle="data/eon_min.py">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co">#!/usr/bin/env -S pixi exec --spec eon --spec uv -- uv run</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co"># /// script</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co"># requires-python = "&gt;=3.11"</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co"># dependencies = [</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#     "ase",</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#     "metatrain",</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#     "rgpycrumbs",</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co"># ]</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co"># ///</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="im">import</span> subprocess</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="im">from</span> rgpycrumbs.eon.helpers <span class="im">import</span> write_eon_config</span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="im">from</span> rgpycrumbs.run.jupyter <span class="im">import</span> run_command_or_exit</span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a>repo_id <span class="op">=</span> <span class="st">"lab-cosmo/upet"</span></span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a>tag <span class="op">=</span> <span class="st">"v1.1.0"</span></span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a>url_path <span class="op">=</span> <span class="ss">f"models/pet-mad-s-</span><span class="sc">{</span>tag<span class="sc">}</span><span class="ss">.ckpt"</span></span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a>fname <span class="op">=</span> Path(url_path.replace(<span class="st">".ckpt"</span>, <span class="st">".pt"</span>))</span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a>url <span class="op">=</span> <span class="ss">f"https://huggingface.co/</span><span class="sc">{</span>repo_id<span class="sc">}</span><span class="ss">/resolve/main/</span><span class="sc">{</span>url_path<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a>fname.parent.mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a>subprocess.run(</span>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a>    [</span>
+<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a>        <span class="st">"mtt"</span>,</span>
+<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a>        <span class="st">"export"</span>,</span>
+<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a>        url,</span>
+<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a>        <span class="st">"-o"</span>,</span>
+<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a>        fname,</span>
+<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a>    ],</span>
+<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a>    check<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb9-32"><a href="#cb9-32" tabindex="-1"></a>)</span>
+<span id="cb9-33"><a href="#cb9-33" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Successfully exported </span><span class="sc">{</span>fname<span class="sc">}</span><span class="ss">."</span>)</span>
+<span id="cb9-34"><a href="#cb9-34" tabindex="-1"></a></span>
+<span id="cb9-35"><a href="#cb9-35" tabindex="-1"></a>min_settings <span class="op">=</span> {</span>
+<span id="cb9-36"><a href="#cb9-36" tabindex="-1"></a>    <span class="st">"Main"</span>: {<span class="st">"job"</span>: <span class="st">"minimization"</span>, <span class="st">"random_seed"</span>: <span class="dv">706253457</span>},</span>
+<span id="cb9-37"><a href="#cb9-37" tabindex="-1"></a>    <span class="st">"Potential"</span>: {<span class="st">"potential"</span>: <span class="st">"Metatomic"</span>},</span>
+<span id="cb9-38"><a href="#cb9-38" tabindex="-1"></a>    <span class="st">"Metatomic"</span>: {<span class="st">"model_path"</span>: fname.absolute()},</span>
+<span id="cb9-39"><a href="#cb9-39" tabindex="-1"></a>    <span class="st">"Optimizer"</span>: {</span>
+<span id="cb9-40"><a href="#cb9-40" tabindex="-1"></a>        <span class="st">"max_iterations"</span>: <span class="dv">2000</span>,</span>
+<span id="cb9-41"><a href="#cb9-41" tabindex="-1"></a>        <span class="st">"opt_method"</span>: <span class="st">"lbfgs"</span>,</span>
+<span id="cb9-42"><a href="#cb9-42" tabindex="-1"></a>        <span class="st">"max_move"</span>: <span class="fl">0.5</span>,</span>
+<span id="cb9-43"><a href="#cb9-43" tabindex="-1"></a>        <span class="st">"converged_force"</span>: <span class="fl">0.01</span>,</span>
+<span id="cb9-44"><a href="#cb9-44" tabindex="-1"></a>    },</span>
+<span id="cb9-45"><a href="#cb9-45" tabindex="-1"></a>}</span>
+<span id="cb9-46"><a href="#cb9-46" tabindex="-1"></a></span>
+<span id="cb9-47"><a href="#cb9-47" tabindex="-1"></a>write_eon_config(<span class="st">"."</span>, min_settings)</span>
+<span id="cb9-48"><a href="#cb9-48" tabindex="-1"></a>run_command_or_exit([<span class="st">"eonclient"</span>], capture<span class="op">=</span><span class="va">True</span>, timeout<span class="op">=</span><span class="dv">300</span>)</span></code></pre>
+</div>
+<p>Make it executable and run it:</p>
+<div class="codewrapper sourceCode" id="cb10">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">chmod</span> +x eon_min.py</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="ex">./eon_min.py</span></span></code></pre>
+</div>
+</div>
+<div class="section level3">
+<h3 id="unpacking-the-shebang">Unpacking the Shebang<a class="anchor" aria-label="anchor" href="#unpacking-the-shebang"></a>
+</h3>
+<p>The magic happens in this line: <code class="verbatim">#!/usr/bin/env -S pixi exec --spec eon --spec uv -- uv run</code></p>
+<p>This is a chain of tools:</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>pixi exec</strong>: We ask Pixi to create an
+environment.</li>
+<li>
+<strong>–spec eon</strong>: We explicitly request the <code class="verbatim">eon</code> package (which contains the binary <code class="verbatim">eonclient</code>).</li>
+<li>
+<strong>–spec uv</strong>: We explicitly request <code class="verbatim">uv</code>.</li>
+<li>
+<strong>– uv run</strong>: Once Pixi has set up the environment with
+eOn and <code class="verbatim">uv</code>, it hands control over to <code class="verbatim">uv run</code>.</li>
+<li>
+<strong>PEP 723</strong>: <code class="verbatim">uv run</code> reads
+the script comments and installs the Python libraries (<code class="verbatim">ase</code>, <code class="verbatim">rgpycrumbs</code>).</li>
+</ol>
+<p>This gives us the best of both worlds: Pixi provides the compiled
+binaries, and UV handles the fast Python resolution.</p>
+</div>
+<div class="section level3">
+<h3 id="the-result">The Result<a class="anchor" aria-label="anchor" href="#the-result"></a>
+</h3>
+<p>When executed, the script downloads the model, exports it using <code class="verbatim">metatrain</code>, configures eOn, and runs the
+binary.</p>
+<pre class="example"><code>[INFO] - Using best model from epoch None
+[INFO] - Model exported to '.../models/pet-mad-s-v1.1.0.pt'
+Successfully exported models/pet-mad-s-v1.1.0.pt.
+Wrote eOn config to 'config.ini'
+EON Client
+VERSION: 01e09a5
+...
+[Matter]          0     0.00000e+00         1.30863e+00      -53.90300
+[Matter]          1     1.46767e-02         6.40732e-01      -53.91548
+...
+[Matter]         51     1.56025e-03         9.85039e-03      -54.04262
+Minimization converged within tolerence
+Saving result to min.con
+Final Energy: -54.04261779785156</code></pre>
+<div id="challenge-the-pure-python-minimization" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <span class="callout-header">Challenge</span>
-<div id="challenge-2-how-do-you-nest-solutions-within-challenge-blocks" class="callout-inner">
-<h3 class="callout-title">Challenge 2: how do you nest solutions within
-challenge blocks?</h3>
+<div id="challenge-the-pure-python-minimization" class="callout-inner">
+<h3 class="callout-title">Challenge: The Pure Python Minimization</h3>
 <div class="callout-content">
-
+<p>Create a script named <code class="verbatim">ase_min.py</code> that
+performs the exact same minimization on <code class="verbatim">pos.con</code>, but uses the <a href="https://ase-lib.org/" class="external-link">atomic simulation environment (ASE)</a>
+built-in <code class="verbatim">LBFGS</code> optimizer instead of
+eOn.</p>
+<p><strong>Requirements:</strong></p>
+<ol style="list-style-type: decimal">
+<li>Do we need <code class="verbatim">pixi</code>? Try using the <code class="verbatim">uv</code> shebang only (no <code class="verbatim">pixi</code>).</li>
+<li>Reuse the model file we exported earlier (<code class="verbatim">models/pet-mad-s-v1.1.0.pt</code>).</li>
+<li>Compare the “User Time” of this script vs the EON script.</li>
+</ol>
+<p><strong>Hint:</strong> You will need the <code class="verbatim">metatomic</code> package to load the potential in
+ASE.</p>
 </div>
 </div>
 </div>
@@ -414,43 +722,82 @@ challenge blocks?</h3>
 </button>
 <div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
-<p>You can add a line with at least three colons and a <code class="verbatim">solution</code> tag.</p>
+<div class="codewrapper sourceCode" id="cb12" tangle="data/ase_min.py">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># /// script</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co"># requires-python = "&gt;=3.11"</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co"># dependencies = [</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#     "ase",</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#     "metatomic",</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#     "numpy",</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co"># ]</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co"># ///</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="im">from</span> ase.io <span class="im">import</span> read</span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="im">from</span> ase.optimize <span class="im">import</span> LBFGS</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="im">from</span> metatomic.torch.ase_calculator <span class="im">import</span> MetatomicCalculator</span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="kw">def</span> run_ase_min():</span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a>    atoms <span class="op">=</span> read(<span class="st">"pos.con"</span>)</span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a>    <span class="co"># Reuse the .pt file exported by the previous script</span></span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a>    atoms.calc <span class="op">=</span> MetatomicCalculator(</span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a>        <span class="st">"models/pet-mad-s-v1.1.0.pt"</span>, </span>
+<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a>        device<span class="op">=</span><span class="st">"cpu"</span></span>
+<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a>    )</span>
+<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a></span>
+<span id="cb12-23"><a href="#cb12-23" tabindex="-1"></a>    <span class="co"># Setup Optimizer</span></span>
+<span id="cb12-24"><a href="#cb12-24" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Initial Energy: </span><span class="sc">{</span>atoms<span class="sc">.</span>get_potential_energy()<span class="sc">:.5f}</span><span class="ss"> eV"</span>)</span>
+<span id="cb12-25"><a href="#cb12-25" tabindex="-1"></a></span>
+<span id="cb12-26"><a href="#cb12-26" tabindex="-1"></a>    opt <span class="op">=</span> LBFGS(atoms, logfile<span class="op">=</span><span class="st">"-"</span>) <span class="co"># Log to stdout</span></span>
+<span id="cb12-27"><a href="#cb12-27" tabindex="-1"></a>    opt.run(fmax<span class="op">=</span><span class="fl">0.01</span>)</span>
+<span id="cb12-28"><a href="#cb12-28" tabindex="-1"></a></span>
+<span id="cb12-29"><a href="#cb12-29" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Final Energy:   </span><span class="sc">{</span>atoms<span class="sc">.</span>get_potential_energy()<span class="sc">:.5f}</span><span class="ss"> eV"</span>)</span>
+<span id="cb12-30"><a href="#cb12-30" tabindex="-1"></a></span>
+<span id="cb12-31"><a href="#cb12-31" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb12-32"><a href="#cb12-32" tabindex="-1"></a>    run_ase_min()</span></code></pre>
+</div>
+<pre class="example"><code>Initial Energy: -53.90300 eV
+       Step     Time          Energy          fmax
+....
+LBFGS:   64 20:42:09      -54.042595        0.017080
+LBFGS:   65 20:42:09      -54.042610        0.009133
+Final Energy:   -54.04261 eV</code></pre>
+<p>So we get the same result, but with more steps…</p>
 </div>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="figures">Figures<a class="anchor" aria-label="anchor" href="#figures"></a>
-</h2>
-<hr class="half-width">
-<p>You can use standard markdown for static figures with the following
-syntax:</p>
-<p><code>![optional caption that appears below the figure](figure url){alt='alt text for accessibility purposes'}</code></p>
-<p><a href="https://raw.githubusercontent.com/carpentries/logo/master/Badge_Carpentries.svg" class="external-link">You
-belong in The Carpentries!{alt=‘Blue Carpentries hex person logo with no
-text.’}</a></p>
-<div id="callout1" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
-</div>
-<span class="callout-header">Callout</span>
-<div class="callout-inner">
-<div class="callout-content">
-<p>Callout sections can highlight information.</p>
-<p>They are sometimes used to emphasise particularly important points
-but are also used in some lessons to present “asides”: content that is
-not central to the narrative of the lesson, e.g. by providing the answer
-to a commonly-asked question.</p>
-</div>
-</div>
-</div>
-</section><section><h2 class="section-heading" id="math">Math<a class="anchor" aria-label="anchor" href="#math"></a>
-</h2>
-<hr class="half-width">
-<p>One of our episodes contains <span class="math inline">\(\LaTeX\)</span> equations when describing how to
-create dynamic reports with {knitr}, so we now use mathjax to describe
-this:</p>
-<p><code>$\alpha = \dfrac{1}{(1 - \beta)^2}$</code> becomes: <span class="math inline">\(\alpha = \dfrac{1}{(1 - \beta)^2}\)</span></p>
-<p>Cool, right?</p>
+<table class="table"><tbody>
+<tr>
+<td align="left">Feature</td>
+<td align="left">EON Script (Pixi)</td>
+<td align="left">ASE Script (UV)</td>
+</tr>
+<tr>
+<td align="left"><strong>Shebang</strong></td>
+<td align="left"><code class="verbatim">pixi exec ... -- uv run</code></td>
+<td align="left"><code class="verbatim">uv run</code></td>
+</tr>
+<tr>
+<td align="left"><strong>Engine</strong></td>
+<td align="left">C++ Binary (<code class="verbatim">eonclient</code>)</td>
+<td align="left">Python Loop (<code class="verbatim">LBFGS</code>)</td>
+</tr>
+<tr>
+<td align="left"><strong>Dependencies</strong></td>
+<td align="left">System + Python</td>
+<td align="left">Pure Python</td>
+</tr>
+<tr>
+<td align="left"><strong>Use Case</strong></td>
+<td align="left">HPC / Heavy Simulations</td>
+<td align="left">Analysis / Prototyping</td>
+</tr>
+</tbody></table>
+<p>While the Python version seems easier to setup, the eOn C++ client is
+often more performant, and equally trivial with the c.</p>
 <div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
@@ -459,14 +806,302 @@ this:</p>
 <div class="callout-inner">
 <div class="callout-content">
 <ul>
-<li>Use <code class="verbatim">.md</code> files for episodes when you
-want static content</li>
-<li>Use <code class="verbatim">.Rmd</code> files for episodes when you
-need to generate output</li>
-<li>Run <code class="verbatim">sandpaper::check_lesson()</code> to
-identify any issues with your lesson</li>
-<li>Run <code class="verbatim">sandpaper::build_lesson()</code> to
-preview your lesson locally</li>
+<li>
+<strong>PEP 723</strong> allows inline metadata for Python
+dependencies.</li>
+<li>Use <strong>uv</strong> to run single-file scripts with pure Python
+requirements (<code class="verbatim">numpy</code>, <code class="verbatim">pandas</code>).</li>
+<li>Use <strong>Pixi</strong> when your script depends on system
+libraries or compiled binaries (<code class="verbatim">eonclient</code>,
+<code class="verbatim">ffmpeg</code>).</li>
+<li>Combine them with a <strong>Pixibang</strong> (<code class="verbatim">pixi exec ... -- uv run</code>) for fully reproducible,
+complex scientific workflows.</li>
+</ul>
+</div>
+</div>
+</div>
+<!--
+Place links that you need to refer to multiple times across pages here. Delete
+any links that you are not going to use.
+ -->
+</div>
+</section><div class="footnotes footnotes-end-of-document">
+<hr>
+<ol>
+<li id="fn1"><p>A subset of the <a href="https://atomistic-cookbook.org/examples/eon-pet-neb/eon-pet-neb.html" class="external-link">Cookbook
+recipe</a> for saddle point optimization<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div></section><section id="aio-modules"><p>Content from <a href="modules.html">Modules, Packages, and The Search Path</a></p>
+<hr>
+<p>Last updated on 2026-02-10 |
+
+        <a href="https://github.com/HaoZeke/python_packaging_workbench/edit/main/episodes/modules.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+<div class="text-end">
+          <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
+        </div>
+<div class="overview card">
+<h2 class="card-header">Overview</h2>
+<div class="row g-0">
+<div class="col-md-4">
+<div class="card-body">
+<div class="inner">
+<h3 class="card-title">Questions</h3>
+<ul>
+<li>How does Python know where to find the libraries you import?</li>
+<li>What distinguishes a python “script” from a python “package”?</li>
+<li>What is an <code class="verbatim">__init__.py</code> file?</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="col-md-8">
+<div class="card-body">
+<div class="inner bordered">
+<h3 class="card-title">Objectives</h3>
+<ul>
+<li>Inspect the <code class="verbatim">sys.path</code> variable to
+understand import resolution.</li>
+<li>Differentiate between built-in modules, installed packages, and
+local code.</li>
+<li>Create a minimal local package structure.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section><h2 class="section-heading" id="from-scripts-to-reusable-code">From Scripts to Reusable Code<a class="anchor" aria-label="anchor" href="#from-scripts-to-reusable-code"></a>
+</h2>
+<hr class="half-width">
+<p>You have likely written Python scripts before: single files ending in
+<code class="verbatim">.py</code> that perform a specific analysis or
+task. While scripts are excellent for <strong>execution</strong>
+(running a calculation once), they are often poor at facilitating
+<strong>reuse</strong>.</p>
+<p>Imagine you wrote a useful function to calculate the center of mass
+of a molecule in <code class="verbatim">analysis.py</code>. A month
+later, you start a new project and need that same function. You have two
+options:</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Copy and Paste:</strong> You copy the function into your new
+script.
+<ul>
+<li>
+<strong>Problem:</strong> If you find a bug in the original
+function, you have to remember to fix it in every copy you made.</li>
+</ul>
+</li>
+<li>
+<strong>Importing:</strong> You tell Python to load the code from
+the original file.</li>
+</ol>
+<p>Option 2 is the foundation of Python packaging. To do this
+effectively, we must first understand how Python finds the code you ask
+for.</p>
+</section><section><h2 class="section-heading" id="how-python-finds-code">How Python Finds Code<a class="anchor" aria-label="anchor" href="#how-python-finds-code"></a>
+</h2>
+<hr class="half-width">
+<p>When you type <code class="verbatim">import numpy</code>, Python does
+not magically know where that code lives. It follows a deterministic
+search procedure. We can see this procedure in action using the built-in
+<code class="verbatim">sys</code> module.</p>
+<div class="codewrapper sourceCode" id="cb1">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="im">from</span> pprint <span class="im">import</span> pprint</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>pprint(sys.path)</span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb2">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>[<span class="st">''</span>,</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a> <span class="st">'/usr/lib/python314.zip'</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a> <span class="st">'/usr/lib/python3.14'</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a> <span class="st">'/usr/lib/python3.14/lib-dynload'</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a> <span class="st">'/usr/lib/python3.14/site-packages'</span>]</span></code></pre>
+</div>
+<p>The variable <code class="verbatim">sys.path</code> is a list of
+directory strings. When you import a module, Python scans these
+directories <strong>in order</strong>. The first match wins.</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>The Empty String (’’)</strong>: This represents the
+<strong>current working directory</strong>. This is why you can always
+import a <code class="verbatim">helper.py</code> file if it is sitting
+right next to your script.</li>
+<li>
+<strong>Standard Library</strong>: Locations like <code class="verbatim">/usr/lib/python3.*</code> contain built-ins like <code class="verbatim">os</code>, <code class="verbatim">math</code>, and
+<code class="verbatim">pathlib</code>.</li>
+<li>
+<strong>Site Packages</strong>: Directories like <code class="verbatim">site-packages</code> or <code class="verbatim">dist-packages</code> are where tools like <code class="verbatim">pip</code>, <code class="verbatim">conda</code>, or
+<code class="verbatim">pixi</code> place third-party libraries.</li>
+</ol>
+<div id="challenge-shadowing-the-standard-library" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="challenge-shadowing-the-standard-library" class="callout-inner">
+<h3 class="callout-title">Challenge: Shadowing the Standard Library</h3>
+<div class="callout-content">
+<p>What happens if you create a file named <code class="verbatim">math.py</code> in your current folder with the
+following content:</p>
+<div class="codewrapper sourceCode" id="cb3">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># math.py</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"This is my math!"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="kw">def</span> sqrt(x):</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"No square roots here."</span></span></code></pre>
+</div>
+<p>And then run python and type <code class="verbatim">import math</code>?</p>
+</div>
+</div>
+</div>
+<div id="accordionSolution1" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
+  <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
+</button>
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div class="accordion-body">
+<p>Python will import <strong>your</strong> local file instead of the
+standard library <code class="verbatim">math</code> module.</p>
+<p><strong>Why?</strong> Because the current working directory
+(represented by <code class="verbatim">''</code> in <code class="verbatim">sys.path</code>) is usually at the top of the list. It
+finds your <code class="verbatim">math.py</code> before scanning the
+standard library paths. This is called “Shadowing” and is a common
+source of bugs!</p>
+</div>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="the-anatomy-of-a-package">The Anatomy of a Package<a class="anchor" aria-label="anchor" href="#the-anatomy-of-a-package"></a>
+</h2>
+<hr class="half-width">
+<dl>
+<dt>A <strong>Module</strong>
+</dt>
+<dd>
+Is simply a single file ending in <code class="verbatim">.py</code>.
+</dd>
+<dt>A <strong>Package</strong>
+</dt>
+<dd>
+Is a directory containing modules and a special file: <code class="verbatim">__init__.py</code>.
+</dd>
+</dl>
+<p>Let’s create a very simple local package to handle some basic
+chemistry geometry. We will call it <code class="verbatim">chemlib</code>.</p>
+<div class="codewrapper sourceCode" id="cb4">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">mkdir</span> chemlib</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">touch</span> chemlib/__init__.py</span></code></pre>
+</div>
+<p>Now, create a module inside this directory called <code class="verbatim">geometry.py</code>:</p>
+<div class="codewrapper sourceCode" id="cb5">
+<h3 class="code-label">SH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode sh" tabindex="0"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="ex">def</span> center_of_mass<span class="er">(</span><span class="ex">atoms</span><span class="kw">)</span><span class="bu">:</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>    <span class="ex">print</span><span class="er">(</span><span class="st">"Calculating Center of Mass..."</span><span class="kw">)</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>    <span class="cf">return</span> <span class="ex">[0.0,</span> 0.0, 0.0]</span></code></pre>
+</div>
+<p>Your directory structure should look like this:</p>
+<pre class="text"><code>project_folder/
+├── script.py
+└── chemlib/
+    ├── __init__.py
+    └── geometry.py</code></pre>
+</section><section><h2 class="section-heading" id="the-role-of-__init__-py">The Role of <code class="verbatim">__init__.py</code>
+<a class="anchor" aria-label="anchor" href="#the-role-of-__init__-py"></a>
+</h2>
+<hr class="half-width">
+<p>The <code class="verbatim">__init__.py</code> file tells Python:
+“Treat this directory as a package.” It is the first file executed when
+you import the package. It can be empty, but it is often used to expose
+functions to the top level.</p>
+<p>Open `chemlib/_<sub>init</sub>__.py` and add:</p>
+<div class="codewrapper sourceCode" id="cb7">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Loading chemlib package..."</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="im">from</span> .geometry <span class="im">import</span> center_of_mass</span></code></pre>
+</div>
+<p>Now, from the <code class="verbatim">project_folder</code> (the
+parent directory), launch Python:</p>
+<div class="codewrapper sourceCode" id="cb8">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="im">import</span> chemlib</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>chemlib.center_of_mass([])</span></code></pre>
+</div>
+<pre class="example"><code>Loading chemlib package...
+Calculating Center of Mass...
+[0.0, 0.0, 0.0]</code></pre>
+</section><section><h2 class="section-heading" id="the-it-works-on-my-machine-problem">The “It Works on My Machine” Problem<a class="anchor" aria-label="anchor" href="#the-it-works-on-my-machine-problem"></a>
+</h2>
+<hr class="half-width">
+<p>We have created a package, but it is fragile. It relies entirely on
+the <strong>Current Working Directory</strong> being in <code class="verbatim">sys.path</code>.</p>
+<div id="challenge-moving-directories" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="challenge-moving-directories" class="callout-inner">
+<h3 class="callout-title">Challenge: Moving Directories</h3>
+<div class="callout-content">
+<ol style="list-style-type: decimal">
+<li>Exit your python session.</li>
+<li>Change your directory to go one level up (outside your project
+folder): <code class="verbatim">cd ..</code>
+</li>
+<li>Start Python and try to run <code class="verbatim">import chemlib</code>.</li>
+</ol>
+<p>What happens and why?</p>
+</div>
+</div>
+</div>
+<div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
+  <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
+</button>
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div class="accordion-body">
+<p><strong>Output:</strong></p>
+<pre class="example"><code>ModuleNotFoundError: No module named 'chemlib'</code></pre>
+<p><strong>Reason:</strong> You moved out of the folder containing <code class="verbatim">chemlib</code>. Since the package is not installed in
+the global <code class="verbatim">site-packages</code>, and the current
+directory no longer contains it, Python’s search through <code class="verbatim">sys.path</code> fails to find it.</p>
+</div>
+</div>
+</div>
+</div>
+<p>To solve this, we need a standard way to tell Python “This package
+exists, please add it to your search path permanently.” This is the job
+of <strong>Packaging</strong> and <strong>Installation</strong>.</p>
+<div id="keypoints1" class="callout keypoints">
+<div class="callout-square">
+<i class="callout-icon" data-feather="key"></i>
+</div>
+<span class="callout-header">Key Points</span>
+<div class="callout-inner">
+<div class="callout-content">
+<ul>
+<li>
+<code class="verbatim">sys.path</code> is the list of directories
+Python searches for imports.</li>
+<li>The order of search is: Current Directory -&gt; Standard Library
+-&gt; Installed Packages.</li>
+<li>A <strong>Package</strong> is a directory containing an <code class="verbatim">__init__.py</code> file.</li>
+<li>Code that works locally because of the current directory will fail
+when shared unless properly installed.</li>
 </ul>
 </div>
 </div>
