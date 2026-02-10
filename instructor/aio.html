@@ -970,7 +970,7 @@ following content:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Python will import <strong>your</strong> local file instead of the
 standard library <code class="verbatim">math</code> module.</p>
@@ -983,7 +983,8 @@ source of bugs!</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="the-anatomy-of-a-package">The Anatomy of a Package<a class="anchor" aria-label="anchor" href="#the-anatomy-of-a-package"></a>
+<figure><img src="../fig/python-import-search-path.png" alt="Search order for packages" class="figure mx-auto d-block"><div class="figcaption">Search order for packages</div>
+</figure></section><section><h2 class="section-heading" id="the-anatomy-of-a-package">The Anatomy of a Package<a class="anchor" aria-label="anchor" href="#the-anatomy-of-a-package"></a>
 </h2>
 <hr class="half-width">
 <dl>
@@ -1076,7 +1077,7 @@ folder): <code class="verbatim">cd ..</code>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p><strong>Output:</strong></p>
 <pre class="example"><code>ModuleNotFoundError: No module named 'chemlib'</code></pre>
@@ -1087,7 +1088,8 @@ directory no longer contains it, Python’s search through <code class="verbatim
 </div>
 </div>
 </div>
-<p>To solve this, we need a standard way to tell Python “This package
+<figure><img src="../fig/python-package-structure.png" alt="Directory structure for current setup" class="figure mx-auto d-block"><div class="figcaption">Directory structure for current setup</div>
+</figure><p>To solve this, we need a standard way to tell Python “This package
 exists, please add it to your search path permanently.” This is the job
 of <strong>Packaging</strong> and <strong>Installation</strong>.</p>
 <div id="keypoints1" class="callout keypoints">
