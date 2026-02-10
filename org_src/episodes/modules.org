@@ -101,7 +101,7 @@ bugs!
 #+end_solution
 #+end_challenge
 
-#+BEGIN_SRC dot :file ../../episodes/fig/python-import-search-path.png :cmdline -Kdot -Tpng -Gdpi=200 :cache yes :exports none
+#+BEGIN_SRC dot :file ../../episodes/fig/python-import-search-path.png :cmdline -Kdot -Tpng -Gdpi=150 :cache yes :exports none
 digraph ImportLogic {
     rankdir=TD;
     node [fontname="Helvetica", style=filled];
@@ -134,7 +134,7 @@ digraph ImportLogic {
 }
 #+END_SRC
 
-#+RESULTS[b89543340c8059dcec6d74851cfb6cbdb6791a7b]:
+#+RESULTS[f61c12f9db08f20e8a6a27cda51290890e345782]:
 
 @@markdown:![Search order for packages](fig/python-import-search-path.png)@@
 
@@ -219,7 +219,7 @@ You moved out of the folder containing =chemlib=. Since the package is not insta
 #+end_solution
 #+end_challenge
 
-#+BEGIN_SRC dot :file ../../episodes/fig/python-package-structure.png :cmdline -Kdot -Tpng -Gdpi=200 :cache yes :exports none
+#+BEGIN_SRC dot :file ../../episodes/fig/python-package-structure.png :cmdline -Kdot -Tpng -Gdpi=150 :cache yes :exports none :results none
 digraph PackageTree {
     rankdir=TB;
     node [shape=note, fontname="Helvetica", style=filled, fillcolor="#ffffff", width=1.8];
@@ -246,7 +246,7 @@ digraph PackageTree {
 }
 #+END_SRC
 
-#+RESULTS[831658e66470ba62e7d469f8cf9e2d99fd7f8258]:
+#+RESULTS[ee48a63200ba0a649484b95681826ae5bad2e1fc]:
 
 @@markdown:![Directory structure for current setup](fig/python-package-structure.png)@@
 

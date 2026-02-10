@@ -133,6 +133,46 @@ But files get separated, and versions get desynchronized.
 directly into the script file. Tools like =uv= (a fast Python package manager)
 can read this header and automatically set up the environment for you.
 
+#+BEGIN_SRC dot :file ../../episodes/fig/uv-pep723-flow.png :cmdline -Kdot -Tpng -Gdpi=150 :cache yes :exports none
+digraph UVFlow {
+    rankdir=LR;
+    node [fontname="Helvetica", style=filled];
+    edge [fontname="Helvetica", fontsize=10];
+
+    // Inputs
+    user [label="User", shape=ellipse, fillcolor="#e0e0e0"];
+    script [label="script.py\n(Metadata Header)", shape=note, fillcolor="#fff9c4"];
+
+    // The Tool
+    uv [label="uv run", shape=box, style="rounded,filled", fillcolor="#29b6f6", fontcolor="white"];
+
+    // The Environment
+    subgraph cluster_env {
+        label="Ephemeral Environment";
+        style=dashed;
+        color="#757575";
+        fontcolor="#757575";
+        margin=15;
+
+        venv [label="1. Create/Cache Venv", shape=box, fillcolor="#e1f5fe"];
+        install [label="2. Install 'numpy'", shape=box, fillcolor="#b3e5fc"];
+        run [label="3. Execute Code", shape=component, fillcolor="#81d4fa"];
+        
+        venv -> install;
+        install -> run;
+    }
+
+    // Edges
+    user -> uv [label="Runs"];
+    script -> uv [label="Input"];
+    uv -> venv [label="Parses Header"];
+}
+#+END_SRC
+
+#+RESULTS[b3a143a9d3ffb6b10bccf134e617ef4318364ed7]:
+
+@@markdown:![Flowchart showing uv taking a script with metadata, creating a temporary environment, installing dependencies, and executing the code](fig/uv-pep723-flow.png)@@
+
 We can add a special comment block at the top of our script:
 
 #+begin_src python :tangle data/generate_data_np_uv.py
@@ -292,13 +332,52 @@ The magic happens in this line:
 =#!/usr/bin/env -S pixi exec --spec eon --spec uv -- uv run=
 
 This is a chain of tools:
-1.  *pixi exec*: We ask Pixi to create an environment.
-2.  *--spec eon*: We explicitly request the =eon= package (which contains the binary =eonclient=).
-3.  *--spec uv*: We explicitly request =uv=.
-4.  *-- uv run*: Once Pixi has set up the environment with eOn and =uv=, it hands control over to =uv run=.
+1.  *pixi exec*: Create an environment with =pixi=.
+2.  *--spec eon*: Explicitly request the =eon= package (which contains the binary =eonclient=).
+3.  *--spec uv*: Explicitly request =uv=.
+4.  *-- uv run*: Once the outer environment exists with =eOn= and =uv=, it hands control over to =uv run=.
 5.  *PEP 723*: =uv run= reads the script comments and installs the Python libraries (=ase=, =rgpycrumbs=).
 
-This gives us the best of both worlds: Pixi provides the compiled binaries, and UV handles the fast Python resolution.
+This gives us the best of both worlds: ~pixi~ provides the compiled binaries, and ~uv~ handles the fast Python resolution.
+
+#+BEGIN_SRC dot :file ../../episodes/fig/pixi-uv-stack.png :cmdline -Kdot -Tpng -Gdpi=150 :cache yes :exports none
+digraph PixiStack {
+    rankdir=TB;
+    node [shape=box, fontname="Helvetica", style=filled];
+    compound=true;
+
+    // Outer Layer: Pixi
+    subgraph cluster_pixi {
+        label="Layer 1: Pixi (System & Binaries)";
+        style=filled;
+        fillcolor="#fff3e0"; // Orange tint
+        color="#ffcc80";
+
+        pixi_bin [label="Binaries\n(eonclient)", fillcolor="#ffe0b2"];
+        
+        // Inner Layer: UV
+        subgraph cluster_uv {
+            label="Layer 2: UV (Python Packages)";
+            style=filled;
+            fillcolor="#e1f5fe"; // Blue tint
+            color="#81d4fa";
+
+            uv_libs [label="Python Libraries\n(numpy, ase, metatomic)", fillcolor="#b3e5fc"];
+            
+            // The Script
+            script [label="eon_min.py", shape=note, fillcolor="#ffffff", penwidth=2];
+        }
+    }
+
+    // Relationships
+    pixi_bin -> script [label="Shell Access\n(subprocess.run)", style=dashed, lhead=cluster_uv];
+    uv_libs -> script [label="Import Access\n(import numpy)"];
+}
+#+END_SRC
+
+#+RESULTS[aa278f3c87957881f9fbc5dc632c76d1fc12d2ee]:
+
+@@markdown:![Diagram showing the nested layers: Pixi providing system binaries like eonclient, wrapping UV which provides Python libraries like numpy, both supporting the script](fig/pixi-uv-stack.png)@@
 
 ** The Result
 
