@@ -8,31 +8,67 @@ title: "Setup"
 ---
 #+end_export
 
-** Software Setup
+** Software setup
 #+begin_discussion
 {{{mdheader(### Details)}}}
 
-We basically require ~pixi~ and ~uv~. For conciseness, the instructions for
-these are reproduced below.
+We basically require ~pixi~ and ~uv~. For conciseness, we reproduce the most direct
+instructions below.
+
+Technically any Python interpreter suffices, here we use ~pixi~ to handle system
+dependencies and run tasks, with ~uv~ for managing Python dependencies and
+environments.
 #+end_discussion
 
 #+begin_spoiler
 {{{mdheader(### Windows)}}}
 
-Use PuTTY
+Following along with the ~pixi~ [[https://pixi.prefix.dev/latest/installation/#__tabbed_1_2][instructions upstream here]].
+
+#+begin_src bash
+powershell -ExecutionPolicy Bypass -c "irm -useb https://pixi.sh/install.ps1 | iex"
+#+end_src
+
+Along with ~uv~ from [[https://docs.astral.sh/uv/getting-started/installation/#__tabbed_1_2][the official installation documentation]].
+
+#+begin_src bash
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+#+end_src
+
 #+end_spoiler
 
 #+begin_spoiler
-{{{mdheader(### MacOS)}}}
+{{{mdheader(### MacOS and Linux)}}}
 
-Use ~Terminal.app~
+Following along with the ~pixi~ [[https://pixi.prefix.dev/latest/installation/#__tabbed_1_1][instructions upstream here]].
+
+#+begin_src bash
+curl -fsSL https://pixi.sh/install.sh | sh
+#+end_src
+
+Along with ~uv~ [[https://docs.astral.sh/uv/getting-started/installation/#__tabbed_1_1][from the official documentation]].
+
+#+begin_src bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+#+end_src
+
 #+end_spoiler
 
-#+begin_spoiler
-{{{mdheader(### MacOS)}}}
+# Local Variables:
+# eval: (add-hook 'after-save-hook 'export-as-workbench-md nil t)
+# End:
 
-Use ~Terminal~
-#+end_spoiler
+** Accounts required
+To finalize publishing to an index [fn:: Making the code widely available over the net] we need:
+- A Git instance in the cloud :: Any of Github, Gitlab, Sourcehut etc. would work, [[https://docs.github.com/en/get-started/start-your-journey/creating-an-account-on-github][Github is recommended]].
+- An index account :: For the tutorial [[https://test.pypi.org/account/register/][Test PyPI]] will suffice, for production, an account [[https://pypi.org/account/register/][on PyPI]] would be required as well.
+
+#+begin_checklist
+
+- [ ] I have an account on a Git server
+- [ ] I have an account on Test PyPI
+
+#+end_checklist
 
 # Local Variables:
 # eval: (add-hook 'after-save-hook 'export-as-workbench-md nil t)

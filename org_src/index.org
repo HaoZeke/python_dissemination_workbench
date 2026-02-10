@@ -12,7 +12,8 @@ This lesson teaches how to share Python code, both in the form of packages, and
 reproducible scripts. The teaching philosophy is to cover "good enough"
 practices, with more content linked out when necessary.
 
-** Prerequisites
+#+begin_prereq
+
 - [ ] Basic understanding of Python syntax
 - [ ] Basic understanding of Shell scripts
 
@@ -57,6 +58,8 @@ head readme.org
 
 
 #+end_spoiler
+
+#+end_prereq
 
 # Local Variables:
 # eval: (add-hook 'after-save-hook 'export-as-workbench-md nil t)
