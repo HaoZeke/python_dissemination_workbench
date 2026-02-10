@@ -42,6 +42,10 @@ branch: "main"
 # Who to contact if there are any issues
 contact: "rgoswami@ieee.org"
 
+# Plausible
+analytics: |
+  <script defer data-domain="pydissem.rgoswami.me" src="https://analytics.turtletech.us/js/script.outbound-links.js"></script>
+
 # Navigation ------------------------------------------------
 #
 # Use the following menu items to specify the order of
