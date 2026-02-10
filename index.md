@@ -6,8 +6,7 @@ This lesson teaches how to share Python code, both in the form of
 packages, and reproducible scripts. The teaching philosophy is to cover
 "good enough" practices, with more content linked out when necessary.
 
-## Prerequisites
-
+::: prereq
 -   [ ] Basic understanding of Python syntax
 -   [ ] Basic understanding of Shell scripts
 
@@ -46,4 +45,5 @@ pwd
 # view first few lines of a file
 head readme.org
 ```
+:::
 :::
