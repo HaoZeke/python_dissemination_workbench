@@ -1,0 +1,42 @@
+#+EXPORT_FILE_NAME: ../../learners/setup.md
+#+OPTIONS: toc:nil author:nil date:nil num:nil title:nil
+#+MACRO: mdheader @@markdown:$1@@
+
+#+begin_export markdown
+---
+title: "Setup"
+---
+#+end_export
+
+** Data Sets
+
+# FIXME: place any data you want learners to use in `episodes/data` and then use
+#        a relative link ( [data zip file](data/lesson-data.zip) ) to provide a
+#        link to it, replacing the example.com link.
+
+Download the [[https://example.com/FIXME][data zip file]] and unzip it to your Desktop.
+
+** Software Setup
+#+begin_discussion
+{{{mdheader(### Details)}}}
+
+Setup for different systems can be presented in dropdown menus via a ~spoiler~
+tag. They will join to this discussion block, so you can give a general overview
+of the software used in this lesson here and fill out the individual operating
+systems (and potentially add more, e.g. online setup) in the solutions blocks.
+#+end_discussion
+
+#+begin_spoiler
+{{{mdheader(### Windows)}}}
+Use PuTTY
+#+end_spoiler
+
+#+begin_spoiler
+{{{mdheader(### MacOS)}}}
+Use ~Terminal.app~
+#+end_spoiler
+
+#+begin_spoiler
+{{{mdheader(### MacOS)}}}
+Use ~Terminal~
+#+end_spoiler
