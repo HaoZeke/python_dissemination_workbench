@@ -28,15 +28,18 @@ systems (and potentially add more, e.g. online setup) in the solutions blocks.
 
 #+begin_spoiler
 {{{mdheader(### Windows)}}}
+
 Use PuTTY
 #+end_spoiler
 
 #+begin_spoiler
 {{{mdheader(### MacOS)}}}
+
 Use ~Terminal.app~
 #+end_spoiler
 
 #+begin_spoiler
 {{{mdheader(### MacOS)}}}
+
 Use ~Terminal~
 #+end_spoiler
