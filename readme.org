@@ -14,3 +14,6 @@ pixi s
 Rscript -e 'sandpaper::serve()'
 #+end_src
 
+# ** TODO cleaner generation from org->md
+# i.e. do it in CI and on a separate branch instead of commiting both to the
+# ~main~.
