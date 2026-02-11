@@ -1,0 +1,365 @@
+#+EXPORT_FILE_NAME: ../../episodes/packaging_with_pyproject.md
+#+OPTIONS: toc:nil author:nil date:nil num:nil title:nil
+#+MACRO: mdheader @@markdown:$1@@
+#+PROPERTY: header-args:bash :results output :exports both :cache yes :wrap src bash
+#+PROPERTY: header-args:python :session pkgPy :results output :exports both :cache yes :wrap src python
+
+#+begin_export markdown
+---
+title: "The Project Standard: pyproject.toml"
+teaching: 20
+exercises: 10
+---
+#+end_export
+
+#+begin_questions
+- How do I turn my folder of code into an installable library?
+- What is =pyproject.toml= and why is it the standard?
+- How does =uv= simplify project management?
+- Why use the =src= layout?
+#+end_questions
+
+#+begin_objectives
+- Use =uv init= to generate a standard =pyproject.toml= (PEP 621).
+- Organize code using the =src= layout to prevent import errors.
+- Manage dependencies and lockfiles using =uv add=.
+- Run code in an isolated environment using =uv run=.
+#+end_objectives
+
+* The Installation Problem
+:PROPERTIES:
+:ID:       7ea4dd6f-c2c2-4756-9202-f6f0c2f21bbe
+:END:
+
+In the previous episode, we hit a wall: our =chemlib= package only worked when
+the interpreter starts from the project folder. To fix this, we need to
+*Install* the package into our Python environment.
+
+As far as Python is concerned, an "installation" involves placing the files
+somewhere the interpreter will find them. One of the simplest ways involves
+setting the =PYTHONPATH= terminal variable.
+
+@@markdown:![The packaging gradient, from the [[https://www.youtube.com/watch?v=iLVNWfPWAC8][Hashemi PyBay'17]] and [[https://rgoswami.me/posts/pycon-in-2020-meta/][Goswami PyCon 2020 presentation]]](fig/The_Installation_Problem/2026-02-11_06-21-53_screenshot.png]])@@
+
+#+begin_callout
+
+{{{mdheader(### The Packaging Timeline)}}}
+
+An annotated timeline of tooling:
+- 2003 :: [[https://peps.python.org/pep-0301/][PEP 301]] defines PyPI
+- 2004 :: =setuptools= declares dependencies
+- 2005 :: packages are hosted on PyPI
+- 2007 :: =virtualenv= is released to support multiple Python versions
+- 2008 :: =pip= is released for better dependency management
+- 2012 :: multi-language distribution discussions from [[https://peps.python.org/pep-0425/][PEP 425]] and [[https://peps.python.org/pep-0427/][PEP 427]] [fn:: ~conda~ arrives here]
+- 2013 :: [[https://peps.python.org/pep-0427/][PEP 427]] standardizes the =wheel= format, replacing eggs
+- 2016 :: [[https://peps.python.org/pep-0518/][PEP 518]] introduces =pyproject.toml= to specify build dependencies [fn:: This solves the "chicken and egg" problem of needing tools to install tools]
+- 2017 :: [[https://peps.python.org/pep-0517/][PEP 517]] separates the build frontend (=pip=) from the backend (=flit=, =hatch=, =poetry=)
+- 2020 :: [[https://peps.python.org/pep-0621/][PEP 621]] standardizes project metadata in =pyproject.toml=, removing the need for =setup.py= configuration
+- 2022 :: [[https://peps.python.org/pep-0668/][PEP 668]] marks system Python environments as "externally managed" to prevent accidental breakage
+- 2021 :: [[https://peps.python.org/pep-0665/][PEP 665]] attempts (and fails) to standardize lockfiles. [fn:: A universal lockfile standard remains elusive; tools like =pdm= and =poetry= start providing specific implementations.]
+- 2024 :: [[https://peps.python.org/pep-0723/][PEP 723]] enables inline script metadata. [fn:: Allows single-file scripts to declare their own dependencies.]
+- 2024 :: [[https://peps.python.org/pep-0735/][PEP 735]] introduces dependency groups (e.g., separating =test= or =lint= dependencies) without requiring a package build.
+- 2025 :: [[https://peps.python.org/pep-0751/][PEP 751]] formalizes the =pylock.toml= file.
+#+end_callout
+
+* Enter =uv=
+
+Sometime in the early 2020s Python projects began adopting a Rust core. Starting with =ruff= and moving up to =uv= and =pixi= in the past few years, these tools are often able cache aggressively, and provide saner resolution of versions and other requirements for packaging.
+
+We will use *uv*, an extremely fast, modern Python package manager, which also
+doubles as [[https://packaging.python.org/en/latest/glossary/#term-Build-Frontend][a frontend]], replacing =pip= with =uv pip= and a backend for pure
+Python distributions.
+
+* Initializing a Project
+
+Let's turn our =chemlib= folder into a proper project. We will use `uv init` to generate the configuration.
+
+#+begin_src bash
+# First, ensure we are in the project root
+cd project_folder
+
+# Initialize a library project
+uv init --lib --name chemlib
+#+end_src
+
+This creates a `pyproject.toml` file. Let's inspect it.
+
+#+begin_src toml filename="pyproject.toml"
+[project]
+name = "chemlib"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Rohit Goswami", email = "rohit.goswami@epfl.ch" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[build-system]
+requires = ["uv_build>=0.9.26,<0.10.0"]
+build-backend = "uv_build"
+#+end_src
+
+* Breakdown
+- *[project]* :: This table is standardized by *PEP 621*. It defines *what* your package is (name, version, dependencies).
+- *[build-system]* :: This defines *how* to build it, with an [[https://packaging.python.org/en/latest/glossary/#term-Build-Backend][appropriate build backend]]. =uv= defaults to =uv_build=[fn:: For compiled code, this will need to be switched out with =meson-python=, =setuptools=, or =scikit-build= to handle C++/Fortran code.].
+
+The Python Packaging User Guide [[https://packaging.python.org/en/latest/guides/writing-pyproject-toml/][provides a complete description]] of the fields in
+the =pyproject.toml=.
+
+* The =src= Layout
+
+=uv init --lib= automatically sets up the [[https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/][*src layout*]] for us [fn:: the flat
+layout has some drawbacks [[https://blog.ionelmc.ro/2014/05/25/python-packaging/#the-structure][related to testing]], though the [[https://docs.python-guide.org/writing/structure/][Hitchhiker's guide disagrees]]]. Your folder structure should now
+look like this:
+
+#+begin_example
+project_folder/
+├── pyproject.toml
+├── src/
+│   └── chemlib/
+│       ├── __init__.py
+│       └── py.typed
+#+end_example
+
+** Why the =src= directory?
+1.  *Testing against the installed package:* With a flat layout (package in root), running =pytest= often imports the *local folder* instead of the *installed package*. This hides installation bugs (like missing data files).
+2.  *Cleaner root:* Your root directory defines the *project* (config, docs, scripts), while =src= holds the *product* (the source code).
+
+#+begin_src bash
+# Copy/Move your geometry.py here
+mv geometry.py src/chemlib
+#+end_src
+
+#+BEGIN_SRC dot :file ../../episodes/fig/src-vs-flat-layout.png :cmdline -Kdot -Tpng -Gdpi=150 :cache yes :exports none
+digraph Layouts {
+    rankdir=TB;
+    node [shape=folder, fontname="Helvetica", style=filled, fillcolor="#fff9c4"];
+    edge [arrowhead=vee];
+
+    subgraph cluster_flat {
+        label="Flat Layout (Maybe Involve Import Errors)";
+        style=dashed;
+        color="#e57373";
+        
+        root1 [label="project/"];
+        mod1 [label="chemlib/", fillcolor="#ffccbc"];
+        test1 [label="tests/"];
+        
+        root1 -> mod1;
+        root1 -> test1;
+        
+        {rank=same; mod1; test1}
+    }
+
+    subgraph cluster_src {
+        label="Src Layout (Isolated & Safe)";
+        style=dashed;
+        color="#81c784";
+        
+        root2 [label="project/"];
+        src [label="src/", fillcolor="#c8e6c9"];
+        mod2 [label="chemlib/", fillcolor="#a5d6a7"];
+        test2 [label="tests/"];
+        
+        root2 -> src;
+        root2 -> test2;
+        src -> mod2;
+    }
+}
+#+END_SRC
+
+#+RESULTS[f8aa6f2cce00a7f09ffc523323b0cfc003e91e3c]:
+
+@@markdown:![Comparison of Flat Layout vs Src Layout folder structures](fig/src-vs-flat-layout.png)@@
+
+* Managing Dependencies
+
+In the first episode, we saw how =numpy= caused crashes when not part of the
+environment. Let's add =numpy= to our project properly.
+
+#+begin_src bash
+uv add numpy
+Using CPython 3.11.14
+Creating virtual environment at: .venv
+Resolved 2 packages in 120ms
+      Built chemlib @ file:///home/goswami/blah
+Prepared 2 packages in 414ms
+Installed 2 packages in 20ms
+ + chemlib==0.1.0 (from file:///home/goswami/blah)
+ + numpy==2.4.2
+#+end_src
+
+This performs two critical actions:
+1.  It adds ="numpy"= to the =dependencies= list in =pyproject.toml=.
+2.  It creates a *=uv.lock=* file.
+
+*The Lockfile:* This file records the *exact* version of numpy (e.g., =2.1.0=)
+and every underlying dependency installed. This guarantees that your teammates
+(and your future self) get the exact same environment.
+
+* Running Code with implicit virtual environments
+
+You might notice that =uv= didn't ask you to activate a virtual environment. It manages one for you automatically.
+
+To run code in this project's environment, we use =uv run=.
+
+#+begin_src bash
+# Run a quick check
+uv run python -c "import chemlib; print(chemlib.__file__)"
+#+end_src
+
+#+begin_example
+.../project_folder/.venv/lib/python3.12/site-packages/chemlib/__init__.py
+#+end_example
+
+Notice the path! Python is loading =chemlib= from =.venv/lib/.../site-packages=.
+This means =uv= has performed an *Editable Install*.
+- We can edit =src/chemlib/geometry.py=.
+- The changes appear immediately in the installed package.
+- But Python treats it as a properly installed library.
+
+#+begin_challenge
+{{{mdheader(## Challenge: Update the Geometry Module)}}}
+
+Now that =numpy= is installed, modify =src/chemlib/geometry.py= to use it.
+
+1. Import =numpy=.
+2. Change =center_of_mass= to accept a list of positions and return the mean position using =np.mean=.
+
+#+begin_solution
+#+begin_src python
+# src/chemlib/geometry.py
+import numpy as np
+
+def center_of_mass(atoms):
+    print("Calculating Center of Mass with NumPy...")
+    # Assume atoms is a list of [x, y, z] coordinates
+    data = np.array(atoms)
+    # Calculate mean along axis 0 (rows)
+    com = np.mean(data, axis=0)
+    return com
+#+end_src
+
+Test it using =uv run=:
+#+begin_src bash
+uv run python -c "import chemlib; print(chemlib.center_of_mass([[0,0,0], [2,2,2]]))"
+#+end_src
+
+Output:
+#+begin_example
+Calculating Center of Mass with NumPy...
+[1. 1. 1.]
+#+end_example
+#+end_solution
+#+end_challenge
+
+* Dependency Resolution and Conflicts
+
+A robust package manager must handle *Constraint Satisfaction Problems*. You might require Library A, which relies on Library C (v1.0), while simultaneously requiring Library B, which relies on Library C (v2.0).
+
+If these version requirements do not overlap, a conflict arises. =uv= detects these impossible states before modifying the environment.
+
+Let us artificially construct a conflict using =pydantic=, a data validation library often used alongside scientific tools.
+
+#+begin_challenge
+{{{mdheader(## Challenge: Inducing a Conflict)}}}
+
+We will attempt to install incompatible versions of =pydantic= and =pydantic-settings= [fn:: adapted from the [[https://github.com/yngvem/pycon25-tutorial/blob/main/uv/tutorial/01-introduction/04-dependencies.md][=uv= PyCon 2025 tutorial]]].
+
+1.  Request an older version of =pydantic= (<2.0).
+2.  Request a newer version of =pydantic-settings= (>=2.0), which technically depends on Pydantic 2.0+.
+
+#+begin_src bash
+uv add "pydantic<2" "pydantic-settings>=2"
+#+end_src
+#+end_challenge
+
+
+
+The output should resemble:
+
+#+begin_example
+  × No solution found when resolving dependencies:
+  ╰─▶ Because only the following versions of pydantic-settings are available:
+          pydantic-settings<=2.0.0
+          ...
+      and pydantic-settings==2.0.0 depends on pydantic>=2.0b3, we can conclude that
+      pydantic-settings>=2.0.0,<2.0.1 depends on pydantic>=2.0b3.
+      And because pydantic-settings>=2.0.1,<=2.0.3 depends on pydantic>=2.0.1, we can conclude that
+      pydantic-settings>=2.0.0,<2.1.0 depends on pydantic>=2.0b3.
+      And because pydantic-settings>=2.1.0,<=2.2.1 depends on pydantic>=2.3.0 and pydantic>=2.7.0, we
+      can conclude that pydantic-settings>=2.0.0 depends on pydantic>=2.0b3.
+      And because your project depends on pydantic<2 and pydantic-settings>=2, we can conclude that
+      your project's requirements are unsatisfiable.
+  help: If you want to add the package regardless of the failed resolution, provide the `--frozen` flag
+        to skip locking and syncing.
+#+end_example
+
+#+BEGIN_SRC dot :file ../../episodes/fig/dependency-conflict.png :cmdline -Kdot -Tpng -Gdpi=150 :cache yes :exports none
+digraph Conflict {
+    rankdir=TD;
+    node [fontname="Helvetica", style=filled, shape=box];
+    edge [fontname="Helvetica"];
+
+    root [label="My Project", fillcolor="#e0e0e0"];
+    
+    // Left branch
+    pyd_req [label="Requires:\npydantic < 2.0", fillcolor="#ffccbc"];
+    
+    // Right branch
+    set_req [label="Requires:\npydantic-settings >= 2.0", fillcolor="#bbdefb"];
+    settings [label="pydantic-settings 2.0", fillcolor="#90caf9"];
+    
+    // The conflict source
+    transitive [label="Requires:\npydantic >= 2.0", fillcolor="#ffab91"];
+
+    // Connections
+    root -> pyd_req;
+    root -> set_req;
+    
+    set_req -> settings;
+    settings -> transitive;
+
+    // The Clash
+    conflict [label="CONFLICT\n(<2.0 vs >=2.0)", shape=octagon, fillcolor="#ff5252", fontcolor="white"];
+    
+    pyd_req -> conflict [style=dashed, color="#d32f2f", penwidth=2];
+    transitive -> conflict [style=dashed, color="#d32f2f", penwidth=2];
+}
+#+END_SRC
+
+#+RESULTS[5cbccd4e85f635ec5a65ef70148fff2236a4a32f]:
+
+@@markdown:![Graph showing two dependencies requiring incompatible versions of pydantic](fig/dependency-conflict.png)@@
+
+This failure protects the development environment. =uv= refuses to install a broken state.
+
+* Abstract vs. Concrete Dependencies
+
+We now resolve the conflict by allowing the solver to select the latest compatible versions (removing the manual version pins).
+
+#+begin_src bash
+uv add pydantic pydantic-settings
+#+end_src
+
+This brings us to a critical distinction in Python packaging:
+
+1.  *Abstract Dependencies (=pyproject.toml=):* These define the *minimum requirements* for the project. For a library like =chemlib=, we prefer loose constraints (e.g., =metatrain>=0.1.0=) to maximize compatibility with other packages.
+2.  *Concrete Dependencies (=uv.lock=):* This file records the *exact resolution* (e.g., =metatrain==0.1.5=, =torch==2.1.0=) used in development. It ensures reproducibility.
+
+The lockfile guarantees that all developers operate on an identical atomic substrate, eliminating the "works on my machine" class of defects.
+
+#+begin_keypoints
+- *pyproject.toml* is the standard recipe for Python projects (PEP 621).
+- *uv add* manages dependencies and ensures reproducibility via *uv.lock*.
+- *uv run* executes code in an isolated, editable environment without manual activation.
+- *Isolation:* =uv= enforces a clean environment, preventing accidental usage of unlisted packages.
+- *Manifest vs. Lock:* =pyproject.toml= declares *what* we need; =uv.lock= records *exactly what* we installed.
+#+end_keypoints
+
+# Local Variables:
+# eval: (add-hook 'after-save-hook 'export-as-workbench-md nil t)
+# End:
