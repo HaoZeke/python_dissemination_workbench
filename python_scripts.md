@@ -240,7 +240,8 @@ Coordinates of Component 4
 EOF
 ```
 
-Now, create the script `eon_min.py`{.verbatim}. Note the shebang line!
+Now, create the script `eon_min.py`{.verbatim}. Note the shebang line,
+and the use of a `git`{.verbatim} revision!
 
 ``` {.python tangle="data/eon_min.py"}
 #!/usr/bin/env -S pixi exec --spec eon --spec uv -- uv run
@@ -248,7 +249,7 @@ Now, create the script `eon_min.py`{.verbatim}. Note the shebang line!
 # requires-python = ">=3.11"
 # dependencies = [
 #     "ase",
-#     "metatrain",
+#     "metatrain @ git+https://github.com/metatensor/metatrain@492f0bfaeb3ea72fda4252b0dd6c055363cf199a",
 #     "rgpycrumbs",
 # ]
 # ///
@@ -263,13 +264,13 @@ repo_id = "lab-cosmo/upet"
 tag = "v1.1.0"
 url_path = f"models/pet-mad-s-{tag}.ckpt"
 fname = Path(url_path.replace(".ckpt", ".pt"))
-url = f"https://huggingface.co/{repo_id}/resolve/main/{url_path}"
 fname.parent.mkdir(parents=True, exist_ok=True)
 subprocess.run(
     [
         "mtt",
         "export",
-        url,
+        repo_id,
+        url_path,
         "-o",
         fname,
     ],
