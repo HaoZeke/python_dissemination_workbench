@@ -39,9 +39,10 @@ As far as Python is concerned, an "installation" involves placing the files
 somewhere the interpreter will find them. One of the simplest ways involves
 setting the =PYTHONPATH= terminal variable.
 
-@@markdown:![The packaging gradient, from the [[https://www.youtube.com/watch?v=iLVNWfPWAC8][Hashemi PyBay'17]] and [[https://rgoswami.me/posts/pycon-in-2020-meta/][Goswami PyCon 2020 presentation]]](fig/The_Installation_Problem/2026-02-11_06-21-53_screenshot.png]])@@
+@@markdown:![The packaging gradient, from the [Hashemi PyBay'17](https://www.youtube.com/watch?v=iLVNWfPWAC8) and [Goswami PyCon 2020](https://rgoswami.me/posts/pycon-in-2020-meta) presentation](fig/The_Installation_Problem/2026-02-11_06-21-53_screenshot.png)@@
 
 #+begin_callout
+#+begin_spoiler
 
 {{{mdheader(### The Packaging Timeline)}}}
 
@@ -61,19 +62,20 @@ An annotated timeline of tooling:
 - 2024 :: [[https://peps.python.org/pep-0723/][PEP 723]] enables inline script metadata. [fn:: Allows single-file scripts to declare their own dependencies.]
 - 2024 :: [[https://peps.python.org/pep-0735/][PEP 735]] introduces dependency groups (e.g., separating =test= or =lint= dependencies) without requiring a package build.
 - 2025 :: [[https://peps.python.org/pep-0751/][PEP 751]] formalizes the =pylock.toml= file.
+#+end_spoiler
 #+end_callout
 
 * Enter =uv=
 
 Sometime in the early 2020s Python projects began adopting a Rust core. Starting with =ruff= and moving up to =uv= and =pixi= in the past few years, these tools are often able cache aggressively, and provide saner resolution of versions and other requirements for packaging.
 
-We will use *uv*, an extremely fast, modern Python package manager, which also
+We will use *uv*, a convenient, modern Python package manager, which also
 doubles as [[https://packaging.python.org/en/latest/glossary/#term-Build-Frontend][a frontend]], replacing =pip= with =uv pip= and a backend for pure
 Python distributions.
 
 * Initializing a Project
 
-Let's turn our =chemlib= folder into a proper project. We will use `uv init` to generate the configuration.
+Let's turn our =chemlib= folder into a proper project. We will use =uv init= to generate the configuration.
 
 #+begin_src bash
 # First, ensure we are in the project root
@@ -103,8 +105,8 @@ build-backend = "uv_build"
 #+end_src
 
 * Breakdown
-- *[project]* :: This table is standardized by *PEP 621*. It defines *what* your package is (name, version, dependencies).
-- *[build-system]* :: This defines *how* to build it, with an [[https://packaging.python.org/en/latest/glossary/#term-Build-Backend][appropriate build backend]]. =uv= defaults to =uv_build=[fn:: For compiled code, this will need to be switched out with =meson-python=, =setuptools=, or =scikit-build= to handle C++/Fortran code.].
+- =[project]= :: This table is standardized by *PEP 621*. It defines *what* your package is (name, version, dependencies).
+- =[build-system]= :: This defines *how* to build it, with an [[https://packaging.python.org/en/latest/glossary/#term-Build-Backend][appropriate build backend]]. =uv= defaults to =uv_build=[fn:: For compiled code, this will need to be switched out with =meson-python=, =setuptools=, or =scikit-build= to handle C++/Fortran code.].
 
 The Python Packaging User Guide [[https://packaging.python.org/en/latest/guides/writing-pyproject-toml/][provides a complete description]] of the fields in
 the =pyproject.toml=.

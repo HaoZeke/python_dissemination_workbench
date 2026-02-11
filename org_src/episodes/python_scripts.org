@@ -410,7 +410,9 @@ Create a script named =ase_min.py= that performs the exact same minimization on 
 2. Reuse the model file we exported earlier (=models/pet-mad-s-v1.1.0.pt=).
 3. Compare the "User Time" of this script vs the EON script.
 
+   #+begin_hint
 *Hint:* You will need the =metatomic= package to load the potential in ASE.
+   #+end_hint
 
 #+begin_solution
 #+begin_src python :tangle data/ase_min.py
@@ -458,6 +460,7 @@ Final Energy:   -54.04261 eV
 #+end_example
 
 So we get the same result, but with more steps...
+#+end_challenge
 
 ** Key Features of the Pixibang
 
