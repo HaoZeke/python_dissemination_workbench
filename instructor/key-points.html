@@ -278,6 +278,18 @@
 </div>
 <!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush5">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading5">
+        <a href="quality_assurance.html">4. Quality Assurance: Testing and Linting</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
                 </div>
               </div>
             </div>
@@ -379,6 +391,21 @@ packages.</li>
 <strong>Manifest vs. Lock:</strong> <code class="verbatim">pyproject.toml</code> declares <strong>what</strong> we
 need; <code class="verbatim">uv.lock</code> records <strong>exactly
 what</strong> we installed.</li>
+</ul></section><section id="quality_assurance"><h2 class="section-heading"><a href="quality_assurance.html">Quality Assurance: Testing and Linting</a></h2>
+<hr class="half-width">
+<ul>
+<li>
+<strong>Development Dependencies</strong> (<code class="verbatim">uv add --dev</code>) keep tools like linters separate
+from library requirements.</li>
+<li>
+<strong>Ruff</strong> is the modern standard for fast Python linting
+and formatting.</li>
+<li>
+<strong>Pytest</strong> verifies code correctness; <strong>Src
+Layout</strong> makes test discovery reliable.</li>
+<li>
+<strong>Pre-commit</strong> hooks ensure no bad code ever enters
+your version control history.</li>
 </ul></section>
 </div>
     </main>

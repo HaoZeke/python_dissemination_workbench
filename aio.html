@@ -277,6 +277,18 @@
 </div>
 <!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush5">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading5">
+        <a href="quality_assurance.html">4. Quality Assurance: Testing and Linting</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
                 </div>
               </div>
             </div>
@@ -470,7 +482,7 @@ Python, what happens when they run it?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p><strong>It crashes.</strong></p>
 <div class="codewrapper sourceCode" id="cb5">
@@ -740,7 +752,7 @@ ASE.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb12" tangle="data/ase_min.py">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1448,7 +1460,7 @@ of positions and return the mean position using <code class="verbatim">np.mean</
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1607,7 +1619,311 @@ to testing</a>, though the <a href="https://docs.python-guide.org/writing/struct
 guide disagrees</a><a href="#fnref6" class="footnote-back">↩︎</a></p></li>
 <li id="fn7"><p>adapted from the <a href="https://github.com/yngvem/pycon25-tutorial/blob/main/uv/tutorial/01-introduction/04-dependencies.md" class="external-link"><code class="verbatim">uv</code> PyCon 2025 tutorial</a><a href="#fnref7" class="footnote-back">↩︎</a></p></li>
 </ol>
-</div></section>
+</div></section><section id="aio-quality_assurance"><p>Content from <a href="quality_assurance.html">Quality Assurance: Testing and Linting</a></p>
+<hr>
+<p>Last updated on 2026-02-11 |
+
+        <a href="https://github.com/HaoZeke/python_packaging_workbench/edit/main/episodes/quality_assurance.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+<div class="text-end">
+          <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
+        </div>
+<div class="overview card">
+<h2 class="card-header">Overview</h2>
+<div class="row g-0">
+<div class="col-md-4">
+<div class="card-body">
+<div class="inner">
+<h3 class="card-title">Questions</h3>
+<ul>
+<li>How do I keep development tools separate from my library
+dependencies?</li>
+<li>How can I automatically fix style errors?</li>
+<li>How do I ensure my code works as expected?</li>
+<li>What are pre-commit hooks?</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="col-md-8">
+<div class="card-body">
+<div class="inner bordered">
+<h3 class="card-title">Objectives</h3>
+<ul>
+<li>Use <code class="verbatim">uv add --dev</code> to install tools for
+developers (linting, testing).</li>
+<li>Configure <code class="verbatim">ruff</code> to format code and
+catch bugs.</li>
+<li>Write and run a simple test suite with <code class="verbatim">pytest</code>.</li>
+<li>Automate checks using <code class="verbatim">prek</code>.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section><h2 class="section-heading" id="the-works-on-my-machine-problem-again">The “Works on My Machine” Problem (Again)<a class="anchor" aria-label="anchor" href="#the-works-on-my-machine-problem-again"></a>
+</h2>
+<hr class="half-width">
+<p>We have a <code class="verbatim">pyproject.toml</code> that defines
+what our package needs to <strong>run</strong> (e.g., <code class="verbatim">numpy</code>).</p>
+<p>But as developers, we need more tools. We need tools to:</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Format</strong> code (so it looks professional).</li>
+<li>
+<strong>Lint</strong> code (to catch bugs before running).</li>
+<li>
+<strong>Test</strong> code (to verify correctness).</li>
+</ol>
+<p>We don’t want to force our users to install these tools just to
+<strong>use</strong> our library. We need <strong>Development
+Dependencies</strong>.</p>
+</section><section><h2 class="section-heading" id="development-dependencies-with-uv">Development Dependencies with <code>uv</code>
+<a class="anchor" aria-label="anchor" href="#development-dependencies-with-uv"></a>
+</h2>
+<hr class="half-width">
+<p>We will use <code class="verbatim">uv</code> to add tools to a
+special <code class="verbatim">dev</code> group. This keeps them
+separate from the main <code class="verbatim">dependencies</code>.</p>
+<div class="codewrapper sourceCode" id="cb1">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># Add Ruff (linter), Pytest (testing), and plugins for coverage/randomization</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="ex">uv</span> add <span class="at">--dev</span> ruff pytest pytest-cov pytest-randomly</span></code></pre>
+</div>
+<p>This updates <code class="verbatim">pyproject.toml</code>:</p>
+<div class="codewrapper sourceCode" id="cb2">
+<h3 class="code-label">TOML<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode toml" tabindex="0"><code class="sourceCode toml"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="kw">[dependency-groups]</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="dt">dev</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="st">"pytest&gt;=8.0.0"</span><span class="op">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="st">"ruff&gt;=0.1.0"</span><span class="op">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="op">]</span></span></code></pre>
+</div>
+<figure><img src="fig/dependency-groups.png" alt="Diagram showing how end users only get runtime dependencies while developers get both runtime and dev tools" class="figure mx-auto d-block"><div class="figcaption">Diagram showing how end users only get runtime
+dependencies while developers get both runtime and dev tools</div>
+</figure></section><section><h2 class="section-heading" id="linting-and-formatting-with-ruff">Linting and Formatting with <code>ruff</code>
+<a class="anchor" aria-label="anchor" href="#linting-and-formatting-with-ruff"></a>
+</h2>
+<hr class="half-width">
+<p><a href="https://astral.sh/ruff" class="external-link"><strong>Ruff</strong> is an
+extremely fast static analysis tool</a> that replaces older tools like
+<code class="verbatim">flake8</code> (linting), <code class="verbatim">black</code> (formatting), and <code class="verbatim">isort</code> (sorting imports).</p>
+<p>Let’s see how messy our code is. Open <code class="verbatim">src/chemlib/geometry.py</code> and make it “ugly”: add
+some unused imports or bad spacing.</p>
+<div class="codewrapper sourceCode" id="cb3">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># src/chemlib/geometry.py</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="im">import</span> os  <span class="co"># Unused import!</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="kw">def</span> center_of_mass(atoms):</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>    x <span class="op">=</span> <span class="dv">1</span>    <span class="co"># Unused variable!</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Calculating..."</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>    data <span class="op">=</span> np.array(atoms)</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>    <span class="cf">return</span> np.mean(data, axis<span class="op">=</span><span class="dv">0</span>)</span></code></pre>
+</div>
+<p>Now, run the linter:</p>
+<div class="codewrapper sourceCode" id="cb4">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="ex">uv</span> run ruff check</span></code></pre>
+</div>
+<pre class="example"><code>src/chemlib/geometry.py:2:8: F401 [*] =os= imported but unused
+src/chemlib/geometry.py:6:5: F841 [*] Local variable =x= is assigned to but never used
+Found 2 errors.</code></pre>
+<p><code class="verbatim">ruff</code> found code-smell. Now let’s fix
+the formatting automatically:</p>
+<div class="codewrapper sourceCode" id="cb6">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="ex">uv</span> run ruff format</span></code></pre>
+</div>
+<p>Your code is now perfectly spaced and sorted according to community
+standards.</p>
+</section><section><h2 class="section-heading" id="testing-with-pytest">Testing with <code class="verbatim">pytest</code>
+<a class="anchor" aria-label="anchor" href="#testing-with-pytest"></a>
+</h2>
+<hr class="half-width">
+<p>Now that the code <strong>looks</strong> right, does it
+<strong>work</strong> right?</p>
+<p>We need to write a test. By convention, tests live in a <code class="verbatim">tests/</code> directory at the root of your
+project.</p>
+<div class="codewrapper sourceCode" id="cb7">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">mkdir</span> tests</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co"># Create __init__.py to allow relative imports within the tests directory</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">touch</span> tests/__init__.py</span></code></pre>
+</div>
+<p>Create a test file <code class="verbatim">tests/test_geometry.py</code>:</p>
+<div class="codewrapper sourceCode" id="cb8">
+<h3 class="code-label">SH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode sh" tabindex="0"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="ex">import</span> numpy as np</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="ex">import</span> pytest</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="ex">from</span> chemlib.geometry import center_of_mass</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="ex">def</span> test_center_of_mass_simple<span class="er">(</span><span class="kw">)</span><span class="bu">:</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>    <span class="st">"""Test COM of a simple diatomic molecule."""</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>    <span class="ex">atoms</span> = [[0, 0, 0], [2, 0, 0]]</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>    <span class="ex">expected</span> = [1.0, 0.0, 0.0]</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>    <span class="ex">result</span> = center_of_mass<span class="er">(</span><span class="ex">atoms</span><span class="kw">)</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>    <span class="co"># Use numpy's assertion helper for float comparisons</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>    <span class="ex">np.testing.assert_allclose</span><span class="er">(</span><span class="ex">result,</span> expected<span class="kw">)</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="ex">def</span> test_center_of_mass_cube<span class="er">(</span><span class="kw">)</span><span class="bu">:</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>    <span class="st">"""Test COM of a unit cube."""</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>    <span class="ex">atoms</span> = [</span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>        <span class="ex">[0,0,0],</span> <span class="pp">[</span><span class="ss">1,0,0</span><span class="pp">]</span>, <span class="pp">[</span><span class="ss">0,1,0</span><span class="pp">]</span>, <span class="pp">[</span><span class="ss">0,0,1</span><span class="pp">]</span>,</span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>        <span class="ex">[1,1,0],</span> <span class="pp">[</span><span class="ss">1,0,1</span><span class="pp">]</span>, <span class="pp">[</span><span class="ss">0,1,1</span><span class="pp">]</span>, <span class="pp">[</span><span class="ss">1,1,1</span><span class="pp">]</span></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>    <span class="ex">]</span></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>    <span class="ex">expected</span> = [0.5, 0.5, 0.5]</span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>    <span class="ex">result</span> = center_of_mass<span class="er">(</span><span class="ex">atoms</span><span class="kw">)</span></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a>    <span class="ex">np.testing.assert_allclose</span><span class="er">(</span><span class="ex">result,</span> expected<span class="kw">)</span></span></code></pre>
+</div>
+<p>Run the tests using <code class="verbatim">uv run</code>. We include
+the <code class="verbatim">--cov</code> flag (from <code class="verbatim">pytest-cov</code>) to see which lines of code our tests
+executed:</p>
+<div class="codewrapper sourceCode" id="cb9">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="ex">uv</span> run pytest <span class="at">--cov</span><span class="op">=</span>src</span></code></pre>
+</div>
+<pre class="example"><code>tests/test_geometry.py ..                                            [100%]
+
+---------- coverage: platform linux, python 3.14 ----------
+Name                        Stmts   Miss  Cover
+-----------------------------------------------
+src/chemlib/__init__.py         0      0   100%
+src/chemlib/geometry.py         4      0   100%
+-----------------------------------------------
+TOTAL                           4      0   100%
+
+========================== 2 passed in 0.04s ==========================</code></pre>
+<div class="section level3">
+<h3 id="why-did-this-work">Why did this work?<a class="anchor" aria-label="anchor" href="#why-did-this-work"></a>
+</h3>
+<p>Because of the <strong>Src Layout</strong> established earlier, <code class="verbatim">uv run</code> installs the package in editable mode.
+<code class="verbatim">pytest</code> imports <code class="verbatim">chemlib</code> as if it existed as a standard installed
+library.</p>
+<div id="challenge-break-the-test" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="challenge-break-the-test" class="callout-inner">
+<h3 class="callout-title">Challenge: Break the Test</h3>
+<div class="callout-content">
+<p>Modify <code class="verbatim">src/chemlib/geometry.py</code> to
+introduce a bug (e.g., divide by <code class="verbatim">len(data) - 1</code> instead of the true mean).</p>
+<ol style="list-style-type: decimal">
+<li>Run <code class="verbatim">uv run pytest</code>. What happens?</li>
+<li>Run <code class="verbatim">uv run ruff check</code>. Does the linter
+catch this logic error?</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="accordionSolution1" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
+  <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
+</button>
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div class="accordion-body">
+<ol style="list-style-type: decimal">
+<li>
+<strong>Pytest Fails:</strong> It will show exactly where the
+numbers mismatch (<code class="verbatim">AssertionError</code>).</li>
+<li>
+<strong>Ruff Passes:</strong> Linters check <strong>syntax</strong>
+and <strong>style</strong>, not <strong>logic</strong>. This is why we
+need both!</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="automating-best-practices">Automating best practices<a class="anchor" aria-label="anchor" href="#automating-best-practices"></a>
+</h2>
+<hr class="half-width">
+<figure><img src="fig/pre-commit-flow.png" alt="Flowchart showing git commit triggering ruff checks, which either pass to the repo or fail and require fixes" class="figure mx-auto d-block"><div class="figcaption">Flowchart showing git commit triggering ruff
+checks, which either pass to the repo or fail and require fixes</div>
+</figure><p>We have tools, but we have to remember to run them.
+<strong>pre-commit</strong> hooks automate this by running checks
+<strong>before</strong> you can commit code. We will use <code class="verbatim">prek</code>, <a href="https://prek.j178.dev/cli/" class="external-link">a
+Rust rewrite</a> of the venerable <a href="https://pre-commit.com/" class="external-link">pre-commit</a>.</p>
+<p>First, add it to our dev tools:</p>
+<div class="codewrapper sourceCode" id="cb11">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="ex">uv</span> add <span class="at">--dev</span> prek</span></code></pre>
+</div>
+<p>Create a configuration file <code class="verbatim">.pre-commit-config.yaml</code> in the root
+directory:</p>
+<div class="codewrapper sourceCode" id="cb12">
+<h3 class="code-label">SH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode sh" tabindex="0"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="ex">repos:</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="ex">-</span> repo: https://github.com/astral-sh/ruff-pre-commit</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>    <span class="ex">rev:</span> v0.1.0</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>    <span class="ex">hooks:</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>      <span class="ex">-</span> id: ruff</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>        <span class="ex">args:</span> [ <span class="at">--fix</span> ]</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>      <span class="ex">-</span> id: ruff-format</span></code></pre>
+</div>
+<p>Now, run the hook:</p>
+<div class="codewrapper sourceCode" id="cb13">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="ex">uv</span> run prek</span></code></pre>
+</div>
+<p>.. and finally install the action as a <code class="verbatim">git</code> hook</p>
+<div class="codewrapper sourceCode" id="cb14">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="ex">uv</span> run prek install</span></code></pre>
+</div>
+<pre class="example"><code>prek installed at .git/hooks/pre-commit</code></pre>
+<p>Now, try to commit messy code. <code class="verbatim">git</code> will
+stop you, run <code class="verbatim">ruff</code>, fix the file, and ask
+you to stage the clean file. You can no longer commit ugly code by
+accident!</p>
+<div id="keypoints1" class="callout keypoints">
+<div class="callout-square">
+<i class="callout-icon" data-feather="key"></i>
+</div>
+<span class="callout-header">Key Points</span>
+<div class="callout-inner">
+<div class="callout-content">
+<ul>
+<li>
+<strong>Development Dependencies</strong> (<code class="verbatim">uv add --dev</code>) keep tools like linters separate
+from library requirements.</li>
+<li>
+<strong>Ruff</strong> is the modern standard for fast Python linting
+and formatting.</li>
+<li>
+<strong>Pytest</strong> verifies code correctness; <strong>Src
+Layout</strong> makes test discovery reliable.</li>
+<li>
+<strong>Pre-commit</strong> hooks ensure no bad code ever enters
+your version control history.</li>
+</ul>
+</div>
+</div>
+</div>
+<!--
+Place links that you need to refer to multiple times across pages here. Delete
+any links that you are not going to use.
+ -->
+</section></section>
 </div>
     </main>
 </div>

@@ -73,6 +73,7 @@ episodes:
   - python_scripts.md
   - modules.md
   - pyproject_uv.md
+  - quality_assurance.md
 
 # Information for Learners
 learners:
