@@ -119,11 +119,11 @@
   Python Dissemination
 </div>
 
-<aside class="col-md-12 lesson-progress"><div style="width: 60%" class="percentage">
-    60%
+<aside class="col-md-12 lesson-progress"><div style="width: 38%" class="percentage">
+    38%
   </div>
   <div class="progress incubator">
-    <div class="progress-bar incubator" role="progressbar" style="width: 60%" aria-valuenow="60" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar incubator" role="progressbar" style="width: 38%" aria-valuenow="38" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
     </div>
   </div>
 </aside><div class="container">
@@ -237,6 +237,15 @@
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush4">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading4">
+        <a href="pyproject_uv.html">3. The Project Standard: pyproject.toml</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
                 </div>
               </div>
             </div>
@@ -280,7 +289,7 @@
   <div class="col-xl-8 col-lg-12 primary-content">
     <nav class="lesson-content mx-md-4" aria-label="Previous and Next Chapter"><!-- content for small screens --><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="python_scripts.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
-        <a class="chapter-link float-end" href="index.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="pyproject_uv.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
@@ -288,14 +297,14 @@
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
           Previous: Writing Reproducible
         </a>
-        <a class="chapter-link float-end" href="index.html" rel="next">
-          Home
+        <a class="chapter-link float-end" href="pyproject_uv.html" rel="next">
+          Next: The Project...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Modules, Packages, and The Search Path</h1>
-        <p>Last updated on 2026-02-10 |
+        <p>Last updated on 2026-02-11 |
 
         <a href="https://github.com/HaoZeke/python_packaging_workbench/edit/main/episodes/modules.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -420,7 +429,7 @@ following content:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Python will import <strong>your</strong> local file instead of the
 standard library <code class="verbatim">math</code> module.</p>
@@ -473,7 +482,7 @@ chemistry geometry. We will call it <code class="verbatim">chemlib</code>.</p>
 “Treat this directory as a package.” It is the first file executed when
 you import the package. It can be empty, but it is often used to expose
 functions to the top level.</p>
-<p>Open `chemlib/_<sub>init</sub>__.py` and add:</p>
+<p>Open <code class="verbatim">chemlib/__init__.py</code> and add:</p>
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -517,7 +526,7 @@ folder): <code class="verbatim">cd ..</code>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p><strong>Output:</strong></p>
 <pre class="example"><code>ModuleNotFoundError: No module named 'chemlib'</code></pre>
@@ -545,6 +554,8 @@ Python searches for imports.</li>
 <li>The order of search is: Current Directory -&gt; Standard Library
 -&gt; Installed Packages.</li>
 <li>A <strong>Package</strong> is a directory containing an <code class="verbatim">__init__.py</code> file.</li>
+<li>The <code class="verbatim">__init__.py</code> file is the first file
+loaded when <code class="verbatim">import PKG</code> is run.</li>
 <li>Code that works locally because of the current directory will fail
 when shared unless properly installed.</li>
 </ul></div>
@@ -557,7 +568,7 @@ any links that you are not going to use.
 </section></div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter"><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="python_scripts.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
-        <a class="chapter-link float-end" href="index.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="pyproject_uv.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
@@ -565,8 +576,8 @@ any links that you are not going to use.
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
           Previous: Writing Reproducible
         </a>
-        <a class="chapter-link float-end" href="index.html" rel="next">
-          Home
+        <a class="chapter-link float-end" href="pyproject_uv.html" rel="next">
+          Next: The Project...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
@@ -614,8 +625,8 @@ any links that you are not going to use.
   "url": "https://HaoZeke.github.io/python_packaging_workbench/modules.html",
   "identifier": "https://HaoZeke.github.io/python_packaging_workbench/modules.html",
   "dateCreated": "2026-02-10",
-  "dateModified": "2026-02-10",
-  "datePublished": "2026-02-10"
+  "dateModified": "2026-02-11",
+  "datePublished": "2026-02-11"
 }
 
   </script><script>

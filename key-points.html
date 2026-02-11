@@ -265,6 +265,18 @@
 </div>
 <!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush4">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading4">
+        <a href="pyproject_uv.html">3. The Project Standard: pyproject.toml</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
                 </div>
               </div>
             </div>
@@ -341,8 +353,30 @@ Python searches for imports.</li>
 <li>The order of search is: Current Directory -&gt; Standard Library
 -&gt; Installed Packages.</li>
 <li>A <strong>Package</strong> is a directory containing an <code class="verbatim">__init__.py</code> file.</li>
+<li>The <code class="verbatim">__init__.py</code> file is the first file
+loaded when <code class="verbatim">import PKG</code> is run.</li>
 <li>Code that works locally because of the current directory will fail
 when shared unless properly installed.</li>
+</ul></section><section id="pyproject_uv"><h2 class="section-heading"><a href="pyproject_uv.html">The Project Standard: pyproject.toml</a></h2>
+<hr class="half-width">
+<ul>
+<li>
+<strong>pyproject.toml</strong> is the standard recipe for Python
+projects (PEP 621).</li>
+<li>
+<strong>uv add</strong> manages dependencies and ensures
+reproducibility via <strong>uv.lock</strong>.</li>
+<li>
+<strong>uv run</strong> executes code in an isolated, editable
+environment without manual activation.</li>
+<li>
+<strong>Isolation:</strong> <code class="verbatim">uv</code>
+enforces a clean environment, preventing accidental usage of unlisted
+packages.</li>
+<li>
+<strong>Manifest vs. Lock:</strong> <code class="verbatim">pyproject.toml</code> declares <strong>what</strong> we
+need; <code class="verbatim">uv.lock</code> records <strong>exactly
+what</strong> we installed.</li>
 </ul></section>
 </div>
     </main>
@@ -393,8 +427,8 @@ when shared unless properly installed.</li>
   "url": "https://HaoZeke.github.io/python_packaging_workbench/key-points.html",
   "identifier": "https://HaoZeke.github.io/python_packaging_workbench/key-points.html",
   "dateCreated": "2026-02-10",
-  "dateModified": "2026-02-10",
-  "datePublished": "2026-02-10"
+  "dateModified": "2026-02-11",
+  "datePublished": "2026-02-11"
 }
 
   </script><script>
