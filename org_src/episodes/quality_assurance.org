@@ -1,0 +1,307 @@
+#+EXPORT_FILE_NAME: ../../episodes/quality_assurance.md
+#+OPTIONS: toc:nil author:nil date:nil num:nil title:nil
+#+MACRO: mdheader @@markdown:$1@@
+#+PROPERTY: header-args:bash :results output :exports both :cache yes :wrap src bash
+#+PROPERTY: header-args:python :session qaPy :results output :exports both :cache yes :wrap src python
+
+#+begin_export markdown
+---
+title: "Quality Assurance: Testing and Linting"
+teaching: 20
+exercises: 10
+---
+#+end_export
+
+#+begin_questions
+- How do I keep development tools separate from my library dependencies?
+- How can I automatically fix style errors?
+- How do I ensure my code works as expected?
+- What are pre-commit hooks?
+#+end_questions
+
+#+begin_objectives
+- Use =uv add --dev= to install tools for developers (linting, testing).
+- Configure =ruff= to format code and catch bugs.
+- Write and run a simple test suite with =pytest=.
+- Automate checks using =prek=.
+#+end_objectives
+
+* The "Works on My Machine" Problem (Again)
+
+We have a =pyproject.toml= that defines what our package needs to *run* (e.g., =numpy=).
+
+But as developers, we need more tools. We need tools to:
+1.  *Format* code (so it looks professional).
+2.  *Lint* code (to catch bugs before running).
+3.  *Test* code (to verify correctness).
+
+We don't want to force our users to install these tools just to *use* our library. We need *Development Dependencies*.
+
+* Development Dependencies with ~uv~
+
+We will use =uv= to add tools to a special =dev= group. This keeps them separate from the main =dependencies=.
+
+#+begin_src bash
+# Add Ruff (linter), Pytest (testing), and plugins for coverage/randomization
+uv add --dev ruff pytest pytest-cov pytest-randomly
+#+end_src
+
+This updates =pyproject.toml=:
+
+#+begin_src toml
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.1.0",
+]
+#+end_src
+
+#+BEGIN_SRC dot :file ../../episodes/fig/dependency-groups.png :cmdline -Kdot -Tpng -Gdpi=150 :cache yes :exports none
+digraph DepGroups {
+    rankdir=TB;
+    node [fontname="Helvetica", style=filled, shape=box];
+    edge [fontname="Helvetica", fontsize=10];
+
+    // The Configuration
+    toml [label="pyproject.toml", shape=note, fillcolor="#fff9c4"];
+
+    // The Groups
+    subgraph cluster_groups {
+        label="Dependency Definitions";
+        style=dashed;
+        color="#bdbdbd";
+        
+        prod [label="[project.dependencies]\nnumpy, pandas", fillcolor="#b3e5fc"];
+        dev [label="[dependency-groups]\nruff, pytest", fillcolor="#c8e6c9"];
+    }
+
+    // The Consumers
+    user [label="End User\n(pip install chemlib)", shape=ellipse, fillcolor="#e0e0e0"];
+    developer [label="Developer\n(uv sync --dev)", shape=ellipse, fillcolor="#ffccbc"];
+
+    // Connections
+    toml -> prod;
+    toml -> dev;
+
+    prod -> user [label="Required to Run"];
+    prod -> developer [label="Required to Run"];
+    dev -> developer [label="Required to Test"];
+    
+    // Constraint: User does NOT get dev tools
+    dev -> user [style=invis]; 
+}
+#+END_SRC
+
+#+RESULTS[2a00339aa9b4a78152f15707cdefa44dec0c5ff0]:
+
+@@markdown:![Diagram showing how end users only get runtime dependencies while developers get both runtime and dev tools](fig/dependency-groups.png)@@
+
+* Linting and Formatting with ~ruff~
+
+[[https://astral.sh/ruff][*Ruff* is an extremely fast static analysis tool]] that replaces older tools like =flake8= (linting), =black= (formatting), and =isort= (sorting imports).
+
+Let's see how messy our code is. Open =src/chemlib/geometry.py= and make it "ugly": add some unused imports or bad spacing.
+
+#+begin_src python
+# src/chemlib/geometry.py
+import os  # Unused import!
+import numpy as np
+
+def center_of_mass(atoms):
+    x = 1    # Unused variable!
+    print("Calculating...")
+    data = np.array(atoms)
+    return np.mean(data, axis=0)
+#+end_src
+
+Now, run the linter:
+
+#+begin_src bash
+uv run ruff check
+#+end_src
+
+#+begin_example
+src/chemlib/geometry.py:2:8: F401 [*] =os= imported but unused
+src/chemlib/geometry.py:6:5: F841 [*] Local variable =x= is assigned to but never used
+Found 2 errors.
+#+end_example
+
+=ruff= found code-smell. Now let's fix the formatting automatically:
+
+#+begin_src bash
+uv run ruff format
+#+end_src
+
+Your code is now perfectly spaced and sorted according to community standards.
+
+* Testing with =pytest=
+
+Now that the code *looks* right, does it *work* right?
+
+We need to write a test. By convention, tests live in a =tests/= directory at
+the root of your project.
+
+#+begin_src bash
+mkdir tests
+# Create __init__.py to allow relative imports within the tests directory
+touch tests/__init__.py
+#+end_src
+
+Create a test file =tests/test_geometry.py=:
+
+#+begin_src python filename="tests/test_geometry.py"
+import numpy as np
+import pytest
+from chemlib.geometry import center_of_mass
+
+def test_center_of_mass_simple():
+    """Test COM of a simple diatomic molecule."""
+    atoms = [[0, 0, 0], [2, 0, 0]]
+    expected = [1.0, 0.0, 0.0]
+    
+    result = center_of_mass(atoms)
+    
+    # Use numpy's assertion helper for float comparisons
+    np.testing.assert_allclose(result, expected)
+
+def test_center_of_mass_cube():
+    """Test COM of a unit cube."""
+    atoms = [
+        [0,0,0], [1,0,0], [0,1,0], [0,0,1],
+        [1,1,0], [1,0,1], [0,1,1], [1,1,1]
+    ]
+    expected = [0.5, 0.5, 0.5]
+    result = center_of_mass(atoms)
+    np.testing.assert_allclose(result, expected)
+#+end_src
+
+Run the tests using =uv run=. We include the =--cov= flag (from =pytest-cov=) to
+see which lines of code our tests executed:
+
+#+begin_src bash
+uv run pytest --cov=src
+#+end_src
+
+#+begin_example
+tests/test_geometry.py ..                                            [100%]
+
+---------- coverage: platform linux, python 3.14 ----------
+Name                        Stmts   Miss  Cover
+-----------------------------------------------
+src/chemlib/__init__.py         0      0   100%
+src/chemlib/geometry.py         4      0   100%
+-----------------------------------------------
+TOTAL                           4      0   100%
+
+========================== 2 passed in 0.04s ==========================
+#+end_example
+
+** Why did this work?
+Because of the *Src Layout* established earlier, =uv run= installs the package in editable mode. =pytest= imports =chemlib= as if it existed as a standard installed library.
+
+#+begin_challenge
+{{{mdheader(## Challenge: Break the Test)}}}
+
+Modify =src/chemlib/geometry.py= to introduce a bug (e.g., divide by =len(data) - 1= instead of the true mean).
+
+1. Run =uv run pytest=. What happens?
+2. Run =uv run ruff check=. Does the linter catch this logic error?
+
+#+begin_solution
+1. *Pytest Fails:* It will show exactly where the numbers mismatch (=AssertionError=).
+2. *Ruff Passes:* Linters check *syntax* and *style*, not *logic*. This is why we need both!
+#+end_solution
+#+end_challenge
+
+* Automating best practices
+
+#+BEGIN_SRC dot :file ../../episodes/fig/pre-commit-flow.png :cmdline -Kdot -Tpng -Gdpi=150 :cache yes :exports none
+digraph PreCommit {
+    rankdir=LR;
+    node [fontname="Helvetica", style=filled];
+    edge [fontname="Helvetica", fontsize=10];
+
+    // Action
+    commit [label="git commit", shape=invhouse, fillcolor="#d1c4e9"];
+
+    // The Hook
+    subgraph cluster_hook {
+        label="Pre-commit Hook";
+        style=filled;
+        fillcolor="#eceff1";
+        color="#cfd8dc";
+
+        check [label="1. Run Ruff Check", shape=box, fillcolor="#ffffff"];
+        fmt [label="2. Run Ruff Format", shape=box, fillcolor="#ffffff"];
+        decision [label="Pass?", shape=diamond, style=filled, fillcolor="#ffe0b2"];
+    }
+
+    // Outcomes
+    repo [label="Committed to\nRepo", shape=cylinder, fillcolor="#c8e6c9"];
+    reject [label="Rejected\n(Fix & Add)", shape=octagon, fillcolor="#ffcdd2", fontcolor="#b71c1c"];
+
+    // Flow
+    commit -> check;
+    check -> fmt;
+    fmt -> decision;
+    
+    decision -> repo [label="Yes"];
+    decision -> reject [label="No"];
+}
+#+END_SRC
+
+#+RESULTS[a21399f94d704dc996b892a1daaac953f3da96b9]:
+
+@@markdown:![Flowchart showing git commit triggering ruff checks, which either pass to the repo or fail and require fixes](fig/pre-commit-flow.png)@@
+
+We have tools, but we have to remember to run them. *pre-commit* hooks automate
+this by running checks *before* you can commit code. We will use =prek=, [[https://prek.j178.dev/cli/][a Rust rewrite]] of the venerable [[https://pre-commit.com/][pre-commit]].
+
+First, add it to our dev tools:
+
+#+begin_src bash
+uv add --dev prek
+#+end_src
+
+Create a configuration file =.pre-commit-config.yaml= in the root directory:
+
+#+begin_src yaml filename=".pre-commit-config.yaml"
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.0
+    hooks:
+      - id: ruff
+        args: [ --fix ]
+      - id: ruff-format
+#+end_src
+
+Now, run the hook:
+
+#+begin_src bash
+uv run prek
+#+end_src
+
+.. and finally install the action as a =git= hook
+
+#+begin_src bash
+uv run prek install
+#+end_src
+
+#+begin_example
+prek installed at .git/hooks/pre-commit
+#+end_example
+
+Now, try to commit messy code. =git= will stop you, run =ruff=, fix the file,
+and ask you to stage the clean file. You can no longer commit ugly code by
+accident!
+
+#+begin_keypoints
+- *Development Dependencies* (=uv add --dev=) keep tools like linters separate from library requirements.
+- *Ruff* is the modern standard for fast Python linting and formatting.
+- *Pytest* verifies code correctness; *Src Layout* makes test discovery reliable.
+- *Pre-commit* hooks ensure no bad code ever enters your version control history.
+#+end_keypoints
+
+# Local Variables:
+# eval: (add-hook 'after-save-hook 'export-as-workbench-md nil t)
+# End:
