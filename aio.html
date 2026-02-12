@@ -369,7 +369,7 @@
         
 <section id="aio-python_scripts"><p>Content from <a href="python_scripts.html">Writing Reproducible Python</a></p>
 <hr>
-<p>Last updated on 2026-02-11 |
+<p>Last updated on 2026-02-12 |
 
         <a href="https://github.com/HaoZeke/python_packaging_workbench/edit/main/episodes/python_scripts.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -506,7 +506,7 @@ Python, what happens when they run it?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p><strong>It crashes.</strong></p>
 <div class="codewrapper sourceCode" id="cb5">
@@ -749,11 +749,11 @@ VERSION: 01e09a5
 Minimization converged within tolerence
 Saving result to min.con
 Final Energy: -54.04261779785156</code></pre>
-<div id="challenge-the-pure-python-minimization" class="callout discussion">
+<div id="challenge-the-pure-python-minimization" class="callout challenge">
 <div class="callout-square">
-<i class="callout-icon" data-feather="message-circle"></i>
+<i class="callout-icon" data-feather="zap"></i>
 </div>
-<span class="callout-header">Discussion</span>
+<span class="callout-header">Challenge</span>
 <div id="challenge-the-pure-python-minimization" class="callout-inner">
 <h3 class="callout-title">Challenge: The Pure Python Minimization</h3>
 <div class="callout-content">
@@ -761,28 +761,34 @@ Final Energy: -54.04261779785156</code></pre>
 performs the exact same minimization on <code class="verbatim">pos.con</code>, but uses the <a href="https://ase-lib.org/" class="external-link">atomic simulation environment (ASE)</a>
 built-in <code class="verbatim">LBFGS</code> optimizer instead of
 eOn.</p>
-<p><strong>Requirements:</strong></p>
-<ol style="list-style-type: decimal">
-<li><p>Do we need <code class="verbatim">pixi</code>? Try using the
-<code class="verbatim">uv</code> shebang only (no <code class="verbatim">pixi</code>).</p></li>
-<li><p>Reuse the model file we exported earlier (<code class="verbatim">models/pet-mad-s-v1.1.0.pt</code>).</p></li>
-<li>
-<p>Compare the “User Time” of this script vs the EON script.</p>
+</div>
+</div>
+</div>
 <div id="accordionHint1" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
 <p><strong>Hint:</strong> You will need the <code class="verbatim">metatomic</code> package to load the potential in
 ASE.</p>
+<ul>
+<li>Do we need <code class="verbatim">pixi</code>? Try using the <code class="verbatim">uv</code> shebang only (no <code class="verbatim">pixi</code>).</li>
+<li>Reuse the model file we exported earlier (<code class="verbatim">models/pet-mad-s-v1.1.0.pt</code>).</li>
+<li>Compare the “User Time” of this script vs the EON script.</li>
+</ul>
 </div>
 </div>
 </div>
 </div>
-</li>
-</ol>
+<div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
+  <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
+</button>
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb12" tangle="data/ase_min.py">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -830,6 +836,7 @@ Final Energy:   -54.04261 eV</code></pre>
 </div>
 </div>
 </div>
+</div>
 <div class="section level3">
 <h3 id="key-features-of-the-pixibang">Key Features of the Pixibang<a class="anchor" aria-label="anchor" href="#key-features-of-the-pixibang"></a>
 </h3>
@@ -866,12 +873,12 @@ install Conda, but you can use a virtual environment.</li>
 </div>
 </div>
 </div>
-<div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
+<div id="accordionSolution3" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
-  <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
+  <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <ol style="list-style-type: decimal">
 <li>
@@ -1087,7 +1094,7 @@ following content:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Python will import <strong>your</strong> local file instead of the
 standard library <code class="verbatim">math</code> module.</p>
@@ -1194,7 +1201,7 @@ folder): <code class="verbatim">cd ..</code>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p><strong>Output:</strong></p>
 <pre class="example"><code>ModuleNotFoundError: No module named 'chemlib'</code></pre>
@@ -2380,27 +2387,29 @@ Meson.</li>
 <hr class="half-width">
 <p>In the domain of scientific Python, “packaging” often refers
 effectively to “binary distribution.” When users install libraries such
-as <code class="verbatim">numpy</code>, <code class="verbatim">torch</code>, or <code class="verbatim">scipy</code>,
-they typically download compiled artifacts rather than pure Python
-scripts.</p>
+as <code class="verbatim">numpy</code>, <code class="verbatim">torch</code>, or <code class="verbatim">openblas</code>, they typically download compiled
+artifacts rather than pure Python scripts.</p>
 <p>Investigation of the <code>site-packages</code> directory reveals
 that the core logic resides in <strong>Shared Object</strong> files
 (<code>.so</code> on Linux, <code>.dylib</code> on macOS,
 <code>.dll</code> on Windows). Python functions primarily as the
 interface.</p>
 <p>To distribute high-performance code effectively, one must master the
-pipeline that generates these artifacts:</p>
-<ol style="list-style-type: decimal">
-<li>
-<strong>Translation</strong>: Generating C wrappers for Fortran/C++
-code.</li>
-<li>
-<strong>Compilation</strong>: Transforming source code into shared
-objects.</li>
-<li>
-<strong>Bundling</strong>: Packaging shared objects into Wheels
-(<code>.whl</code>).</li>
-</ol>
+pipeline that generates these artifacts consisting of</p>
+<dl>
+<dt>Translation</dt>
+<dd>
+Generating C wrappers for Fortran/C++ code.
+</dd>
+<dt>Compilation</dt>
+<dd>
+Transforming source code into shared objects.
+</dd>
+<dt>Bundling</dt>
+<dd>
+Packaging shared objects into Wheels (<code>.whl</code>).
+</dd>
+</dl>
 <figure><img src="fig/compiled-extension-flow.png" alt="Flowchart showing f2py converting Fortran source into C wrappers, which are then compiled into a shared object" class="figure mx-auto d-block"><div class="figcaption">Flowchart showing f2py converting Fortran source
 into C wrappers, which are then compiled into a shared object</div>
 </figure></section><section><h2 class="section-heading" id="the-computational-kernel-in-fortran">The Computational Kernel in Fortran<a class="anchor" aria-label="anchor" href="#the-computational-kernel-in-fortran"></a>
@@ -2468,7 +2477,7 @@ really “install” the package yet, a simple <code class="verbatim">assert</co
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -2504,7 +2513,7 @@ files.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Build output </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -2580,7 +2589,7 @@ files.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Generated meson.build </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
 <div class="accordion-body">
 <pre class="meson"><code>project('tmp',
         ['c', 'fortran'],
@@ -2679,7 +2688,7 @@ import the local file).</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
 <div class="accordion-body">
 <p>Hint: You can find the install location using:</p>
 <div class="codewrapper sourceCode" id="cb12">
@@ -2696,7 +2705,7 @@ import the local file).</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -2790,7 +2799,7 @@ or incompatible.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>Answer: 3.</p>
 <p>The error “DLL load failed” implies the Python interpreter attempted
