@@ -401,17 +401,19 @@ Final Energy: -54.04261779785156
 #+end_example
 
 #+begin_challenge
+
 {{{mdheader(## Challenge: The Pure Python Minimization)}}}
 
-Create a script named =ase_min.py= that performs the exact same minimization on =pos.con=, but uses the [[https://ase-lib.org/][atomic simulation environment (ASE)]] built-in =LBFGS= optimizer instead of eOn.
-
-*Requirements:*
-1. Do we need =pixi=? Try using the =uv= shebang only (no =pixi=).
-2. Reuse the model file we exported earlier (=models/pet-mad-s-v1.1.0.pt=).
-3. Compare the "User Time" of this script vs the EON script.
+Create a script named =ase_min.py= that performs the exact same minimization on
+=pos.con=, but uses the [[https://ase-lib.org/][atomic simulation environment (ASE)]] built-in =LBFGS=
+optimizer instead of eOn.
 
    #+begin_hint
 *Hint:* You will need the =metatomic= package to load the potential in ASE.
+
+- Do we need =pixi=? Try using the =uv= shebang only (no =pixi=).
+- Reuse the model file we exported earlier (=models/pet-mad-s-v1.1.0.pt=).
+- Compare the "User Time" of this script vs the EON script.
    #+end_hint
 
 #+begin_solution
@@ -460,6 +462,7 @@ Final Energy:   -54.04261 eV
 #+end_example
 
 So we get the same result, but with more steps...
+#+end_solution
 #+end_challenge
 
 ** Key Features of the Pixibang

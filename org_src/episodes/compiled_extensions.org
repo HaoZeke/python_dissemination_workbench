@@ -29,14 +29,19 @@ exercises: 15
 
 * The Shared Object Reality
 
-In the domain of scientific Python, "packaging" often refers effectively to "binary distribution." When users install libraries such as =numpy=, =torch=, or =scipy=, they typically download compiled artifacts rather than pure Python scripts.
+In the domain of scientific Python, "packaging" often refers effectively to
+"binary distribution." When users install libraries such as =numpy=, =torch=, or
+=openblas=, they typically download compiled artifacts rather than pure Python
+scripts.
 
-Investigation of the ~site-packages~ directory reveals that the core logic resides in *Shared Object* files (~.so~ on Linux, ~.dylib~ on macOS, ~.dll~ on Windows). Python functions primarily as the interface.
+Investigation of the ~site-packages~ directory reveals that the core logic
+resides in *Shared Object* files (~.so~ on Linux, ~.dylib~ on macOS, ~.dll~ on
+Windows). Python functions primarily as the interface.
 
-To distribute high-performance code effectively, one must master the pipeline that generates these artifacts:
-1.  *Translation*: Generating C wrappers for Fortran/C++ code.
-2.  *Compilation*: Transforming source code into shared objects.
-3.  *Bundling*: Packaging shared objects into Wheels (~.whl~).
+To distribute high-performance code effectively, one must master the pipeline that generates these artifacts consisting of
+- Translation :: Generating C wrappers for Fortran/C++ code.
+- Compilation :: Transforming source code into shared objects.
+- Bundling :: Packaging shared objects into Wheels (~.whl~).
 
 #+BEGIN_SRC dot :file ../../episodes/fig/compiled-extension-flow.png :cmdline -Kdot -Tpng -Gdpi=150 :cache yes :exports none
 digraph BuildFlow {
