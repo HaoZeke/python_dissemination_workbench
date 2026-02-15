@@ -305,7 +305,31 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="compiled_extensions.html">6. Compiled Extensions: The Shared Object Pipeline</a>
+        <a href="documentation.html">6. If It Isn't Documented, It Doesn't Exist</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush8">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading8">
+        <a href="ci_cd.html">7. The Gatekeeper: Continuous Integration</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush9">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading9">
+        <a href="compiled_extensions.html">8. Compiled Extensions: The Shared Object Pipeline</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -445,6 +469,42 @@ polluting your environment.</li>
 <li>
 <strong>TestPyPI</strong> is the sandbox for practicing release
 engineering.</li>
+</ul></section><section id="documentation"><h2 class="section-heading"><a href="documentation.html">If It Isn't Documented, It Doesn't ExistThe Documentation Gap<a class="anchor" aria-label="anchor" href="#the-documentation-gap"></a>Writing Good Docstrings<a class="anchor" aria-label="anchor" href="#writing-good-docstrings"></a>Setting Up Sphinx<a class="anchor" aria-label="anchor" href="#setting-up-sphinx"></a>Building the Documentation<a class="anchor" aria-label="anchor" href="#building-the-documentation"></a>Deploying to the Web<a class="anchor" aria-label="anchor" href="#deploying-to-the-web"></a></a></h2>
+<hr class="half-width">
+<ul>
+<li>
+<strong>Docstrings</strong> are the raw material for documentation.
+Use the NumPy style (<code class="verbatim">Parameters</code>, <code class="verbatim">Returns</code>, <code class="verbatim">Examples</code>)
+for scientific code.</li>
+<li>
+<code class="verbatim">Sphinx</code> with <code class="verbatim">autoapi</code> generates a complete API reference by
+scanning your source code, requiring no manual <code class="verbatim">.rst</code> files per module.</li>
+<li>
+<code class="verbatim">intersphinx</code> enables cross-project
+links (e.g., to NumPy, Python), making your documentation part of the
+broader ecosystem.</li>
+<li>Documentation builds can be automated with GitHub Actions and
+deployed to GitHub Pages on every push to <code class="verbatim">main</code>.</li>
+<li>
+<strong>PR Previews</strong> let reviewers see documentation changes
+visually before merging, catching formatting issues that a green
+checkmark cannot.</li>
+</ul></section><section id="ci_cd"><h2 class="section-heading"><a href="ci_cd.html">The Gatekeeper: Continuous IntegrationThe Limits of Local Hooks<a class="anchor" aria-label="anchor" href="#the-limits-of-local-hooks"></a>Anatomy of a Workflow File<a class="anchor" aria-label="anchor" href="#anatomy-of-a-workflow-file"></a>The Test Matrix<a class="anchor" aria-label="anchor" href="#the-test-matrix"></a>Connecting CI to Releases<a class="anchor" aria-label="anchor" href="#connecting-ci-to-releases"></a></a></h2>
+<hr class="half-width">
+<ul>
+<li>
+<strong>Continuous Integration</strong> runs your test suite on a
+neutral server on every push, catching problems that local hooks
+miss.</li>
+<li>
+<code class="verbatim">astral-sh/setup-uv</code> provides a cached,
+high-performance <code class="verbatim">uv</code> environment in GitHub
+Actions.</li>
+<li>A <strong>Matrix Strategy</strong> tests across multiple operating
+systems and Python versions in parallel.</li>
+<li>CI can gate releases: the <code class="verbatim">release</code> job
+uses <code class="verbatim">needs:</code> to ensure tests pass before
+publishing.</li>
 </ul></section><section id="compiled_extensions"><h2 class="section-heading"><a href="compiled_extensions.html">Compiled Extensions: The Shared Object Pipeline</a></h2>
 <hr class="half-width">
 <ul>
@@ -509,8 +569,8 @@ compilers.</li>
   "url": "https://HaoZeke.github.io/python_packaging_workbench/instructor/key-points.html",
   "identifier": "https://HaoZeke.github.io/python_packaging_workbench/instructor/key-points.html",
   "dateCreated": "2026-02-10",
-  "dateModified": "2026-02-12",
-  "datePublished": "2026-02-12"
+  "dateModified": "2026-02-15",
+  "datePublished": "2026-02-15"
 }
 
   </script><script>

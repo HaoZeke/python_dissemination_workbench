@@ -252,7 +252,25 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="compiled_extensions.html">6. Compiled Extensions: The Shared Object Pipeline</a>
+        <a href="documentation.html">6. If It Isn't Documented, It Doesn't Exist</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush8">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading8">
+        <a href="ci_cd.html">7. The Gatekeeper: Continuous Integration</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush9">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading9">
+        <a href="compiled_extensions.html">8. Compiled Extensions: The Shared Object Pipeline</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -303,11 +321,92 @@
         <h1>Learner Profiles</h1>
         
 
-<p>This is a placeholder file. Please add content here.</p>
+<div class="section level1">
+<h1 id="ana-the-grad-student-with-a-growing-codebase">Ana: The Grad Student with a Growing Codebase<a class="anchor" aria-label="anchor" href="#ana-the-grad-student-with-a-growing-codebase"></a></h1>
+<p>Ana is a second-year PhD student in computational chemistry. She
+writes Python scripts daily to process simulation data and generate
+plots. Her <code class="verbatim">analysis/</code> folder has grown to
+dozens of files, and she frequently copies functions between projects.
+She has heard of <code class="verbatim">pip install</code> but has never
+created her own package. She wants to organize her code so that her
+labmates can use it without needing to clone her entire project
+directory.</p>
+<p>Ana will benefit most from the episodes on <strong>modules</strong>,
+<strong>pyproject.toml with uv</strong>, and <strong>quality
+assurance</strong>. She needs to learn how to turn her collection of
+scripts into an installable package and add basic tests so her labmates
+can trust the code.</p>
+</div>
+<div class="section level1">
+<h1 id="raj-the-postdoc-who-needs-reproducibility">Raj: The Postdoc Who Needs Reproducibility<a class="anchor" aria-label="anchor" href="#raj-the-postdoc-who-needs-reproducibility"></a></h1>
+<p>Raj is a postdoc in materials science. He has published two papers
+where reviewers asked for the analysis code, and each time he spent days
+getting scripts to run on a clean machine. His code depends on <code class="verbatim">numpy</code>, <code class="verbatim">scipy</code>, and
+a Fortran library he inherited from a former group member. He is
+comfortable with Python but has never written a <code class="verbatim">pyproject.toml</code> or used a build system.</p>
+<p>Raj will benefit from the full lesson arc, especially
+<strong>reproducible scripts</strong>, <strong>release
+engineering</strong>, and <strong>compiled extensions</strong>. He needs
+to learn how to declare dependencies, pin versions, and build binary
+wheels that include his Fortran code.</p>
+</div>
+<div class="section level1">
+<h1 id="sofia-the-rse-supporting-a-research-group">Sofia: The RSE Supporting a Research Group<a class="anchor" aria-label="anchor" href="#sofia-the-rse-supporting-a-research-group"></a></h1>
+<p>Sofia is a Research Software Engineer embedded in a physics
+department. She maintains three internal Python packages and helps
+researchers publish their code. She is familiar with <code class="verbatim">setuptools</code> and <code class="verbatim">pip</code>
+but wants to modernize the group’s workflow. She has heard about <code class="verbatim">uv</code> and <code class="verbatim">meson-python</code> but has not tried them yet.</p>
+<p>Sofia will use this lesson as a reference for migrating existing
+projects. The episodes on <strong>pyproject.toml with uv</strong>,
+<strong>quality assurance</strong>, <strong>release
+engineering</strong>, and <strong>compiled extensions</strong> are
+directly relevant to her daily work.</p>
+</div>
+<div class="section level1">
+<h1 id="liam-the-masters-student-starting-from-scratch">Liam: The Master’s Student Starting From Scratch<a class="anchor" aria-label="anchor" href="#liam-the-masters-student-starting-from-scratch"></a></h1>
+<p>Liam is a first-year Master’s student in bioinformatics. He has taken
+one Python course and can write basic scripts with <code class="verbatim">pandas</code>. His advisor has asked him to “make his
+analysis reproducible” and he is not sure where to start. He has never
+used the terminal beyond running <code class="verbatim">python script.py</code>.</p>
+<p>Liam should start from the very beginning of the lesson. The episodes
+on <strong>writing reproducible Python</strong> and
+<strong>modules</strong> will give him the conceptual foundation he
+needs before moving on to packaging and tooling.</p>
+</div>
+<div class="section level1">
+<h1 id="elena-the-pi-who-wants-better-group-practices">Elena: The PI Who Wants Better Group Practices<a class="anchor" aria-label="anchor" href="#elena-the-pi-who-wants-better-group-practices"></a></h1>
+<p>Elena is a tenure-track professor who leads a computational materials
+science group of eight students and postdocs. She has noticed that
+onboarding new members takes weeks because each project has its own
+ad-hoc setup, and published results are difficult to reproduce a year
+later. She can write Python but delegates most coding to her team.</p>
+<p>Elena will not attend the full workshop but needs the
+<strong>instructor notes</strong> and <strong>setup</strong> materials
+to evaluate whether to adopt these practices group-wide. The episodes on
+<strong>quality assurance</strong>, <strong>release
+engineering</strong>, and <strong>CI/CD</strong> are most relevant to
+her goal of establishing reproducible lab standards.</p>
+</div>
+<div class="section level1">
+<h1 id="marco-the-domain-scientist-with-legacy-fortran">Marco: The Domain Scientist with Legacy Fortran<a class="anchor" aria-label="anchor" href="#marco-the-domain-scientist-with-legacy-fortran"></a></h1>
+<p>Marco is a senior PhD student in theoretical chemistry. His group
+maintains a Fortran codebase (~15k lines) for electronic structure
+calculations that dates back to the early 2000s. He has written Python
+wrappers using <code class="verbatim">ctypes</code> and <code class="verbatim">subprocess</code> calls, but the build process is
+brittle and only works on the group’s cluster. He wants to make the code
+installable via <code class="verbatim">pip</code> so collaborators can
+use it.</p>
+<p>Marco will benefit most from the episodes on <strong>compiled
+extensions</strong> and <strong>release engineering</strong>. The Meson
+build system and <code class="verbatim">cibuildwheel</code> pipeline
+will directly address his distribution challenge. The
+<strong>documentation</strong> and <strong>CI/CD</strong> episodes are
+also relevant for maintaining the long-term health of his project.</p>
 <!--
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  -->
+</div>
 
 
       </div>
@@ -355,8 +454,8 @@ any links that you are not going to use.
   "url": "https://HaoZeke.github.io/python_packaging_workbench/instructor/profiles.html",
   "identifier": "https://HaoZeke.github.io/python_packaging_workbench/instructor/profiles.html",
   "dateCreated": "2026-02-10",
-  "dateModified": "2026-02-12",
-  "datePublished": "2026-02-12"
+  "dateModified": "2026-02-15",
+  "datePublished": "2026-02-15"
 }
 
   </script><script>

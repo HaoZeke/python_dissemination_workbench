@@ -304,7 +304,31 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="compiled_extensions.html">6. Compiled Extensions: The Shared Object Pipeline</a>
+        <a href="documentation.html">6. If It Isn't Documented, It Doesn't Exist</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush8">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading8">
+        <a href="ci_cd.html">7. The Gatekeeper: Continuous Integration</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush9">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading9">
+        <a href="compiled_extensions.html">8. Compiled Extensions: The Shared Object Pipeline</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -436,6 +460,34 @@ build into sdist tarball and wheel file</div>
 <p aria-hidden="true">Image 1 of 1: ‘Sequence showing developer using uvx twine with an API token to upload artifacts to TestPyPI’</p>
 <figure><img src="fig/publish-workflow.png" alt="Sequence showing developer using uvx twine with an API token to upload artifacts to TestPyPI" class="figure mx-auto d-block"><div class="figcaption">Sequence showing developer using uvx twine with
 an API token to upload artifacts to TestPyPI</div>
+</figure><hr></section><section id="documentation"><h2 class="section-heading"><a href="documentation.html">If It Isn't Documented, It Doesn't ExistThe Documentation Gap<a class="anchor" aria-label="anchor" href="#the-documentation-gap"></a>Writing Good Docstrings<a class="anchor" aria-label="anchor" href="#writing-good-docstrings"></a>Setting Up Sphinx<a class="anchor" aria-label="anchor" href="#setting-up-sphinx"></a>Building the Documentation<a class="anchor" aria-label="anchor" href="#building-the-documentation"></a>Deploying to the Web<a class="anchor" aria-label="anchor" href="#deploying-to-the-web"></a></a></h2>
+<hr class="half-width">
+<h3 id="documentation-figure-1">Figure 1</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Diagram showing source code with docstrings and conf.py feeding into Sphinx with autoapi, producing an HTML site with index and API reference pages’</p>
+<figure><img src="fig/docs-pipeline.png" alt="Diagram showing source code with docstrings and conf.py feeding into Sphinx with autoapi, producing an HTML site with index and API reference pages" class="figure mx-auto d-block"><div class="figcaption">Diagram showing source code with docstrings and
+conf.py feeding into Sphinx with autoapi, producing an HTML site with
+index and API reference pages</div>
+</figure><hr>
+<h3 id="documentation-figure-2">Figure 2</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Diagram showing a PR triggering docs.yml, which uploads an artifact, then pr_comment.yml downloading it and posting a preview link as a PR comment’</p>
+<figure><img src="fig/pr-preview-flow.png" alt="Diagram showing a PR triggering docs.yml, which uploads an artifact, then pr_comment.yml downloading it and posting a preview link as a PR comment" class="figure mx-auto d-block"><div class="figcaption">Diagram showing a PR triggering docs.yml, which
+uploads an artifact, then pr_comment.yml downloading it and posting a
+preview link as a PR comment</div>
+</figure><hr></section><section id="ci_cd"><h2 class="section-heading"><a href="ci_cd.html">The Gatekeeper: Continuous IntegrationThe Limits of Local Hooks<a class="anchor" aria-label="anchor" href="#the-limits-of-local-hooks"></a>Anatomy of a Workflow File<a class="anchor" aria-label="anchor" href="#anatomy-of-a-workflow-file"></a>The Test Matrix<a class="anchor" aria-label="anchor" href="#the-test-matrix"></a>Connecting CI to Releases<a class="anchor" aria-label="anchor" href="#connecting-ci-to-releases"></a></a></h2>
+<hr class="half-width">
+<h3 id="ci_cd-figure-1">Figure 1</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Flowchart showing a developer pushing code, GitHub Actions running checkout, install, lint, and test steps, then either allowing merge or blocking’</p>
+<figure><img src="fig/ci-gatekeeper-flow.png" alt="Flowchart showing a developer pushing code, GitHub Actions running checkout, install, lint, and test steps, then either allowing merge or blocking" class="figure mx-auto d-block"><div class="figcaption">Flowchart showing a developer pushing code,
+GitHub Actions running checkout, install, lint, and test steps, then
+either allowing merge or blocking</div>
+</figure><hr>
+<h3 id="ci_cd-figure-2">Figure 2</h3>
+<figure><img src="../episodes/fig/ci-matrix.png" class="figure mx-auto d-block"></figure><hr>
+<h3 id="ci_cd-figure-3">Figure 3</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Diagram showing a git push triggering six parallel CI jobs across two Python versions and three operating systems, all feeding into a merge decision’</p>
+<figure><img src="fig/ci-matrix.png" alt="Diagram showing a git push triggering six parallel CI jobs across two Python versions and three operating systems, all feeding into a merge decision" class="figure mx-auto d-block"><div class="figcaption">Diagram showing a git push triggering six
+parallel CI jobs across two Python versions and three operating systems,
+all feeding into a merge decision</div>
 </figure><hr></section><section id="compiled_extensions"><h2 class="section-heading"><a href="compiled_extensions.html">Compiled Extensions: The Shared Object Pipeline</a></h2>
 <hr class="half-width">
 <h3 id="compiled_extensions-figure-1">Figure 1</h3>
@@ -498,8 +550,8 @@ to PyPI</div>
   "url": "https://HaoZeke.github.io/python_packaging_workbench/images.html",
   "identifier": "https://HaoZeke.github.io/python_packaging_workbench/images.html",
   "dateCreated": "2026-02-10",
-  "dateModified": "2026-02-12",
-  "datePublished": "2026-02-12"
+  "dateModified": "2026-02-15",
+  "datePublished": "2026-02-15"
 }
 
   </script><script>

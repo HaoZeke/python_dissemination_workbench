@@ -252,7 +252,25 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="compiled_extensions.html">6. Compiled Extensions: The Shared Object Pipeline</a>
+        <a href="documentation.html">6. If It Isn't Documented, It Doesn't Exist</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush8">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading8">
+        <a href="ci_cd.html">7. The Gatekeeper: Continuous Integration</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush9">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading9">
+        <a href="compiled_extensions.html">8. Compiled Extensions: The Shared Object Pipeline</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -316,7 +334,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Reference</h1>
-        <p>Last updated on 2023-03-16 |
+        <p>Last updated on 2026-02-15 |
 
         <a href="https://github.com/HaoZeke/python_packaging_workbench/edit/main/learners/reference.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -329,13 +347,421 @@
         </div>
 
         
-<section><h2 class="section-heading" id="glossary">Glossary<a class="anchor" aria-label="anchor" href="#glossary"></a></h2>
-<hr class="half-width"><p>This is a placeholder file. Please add content here.</p>
-<!--
+
+<div class="section level1">
+<h1 id="glossary">Glossary<a class="anchor" aria-label="anchor" href="#glossary"></a></h1>
+<dl><dt>Abstract Dependency</dt>
+<dd>
+A dependency declaration with loose version constraints (e.g., <code class="verbatim">numpy&gt;=1.20</code>) as found in <code class="verbatim">pyproject.toml</code>, maximizing compatibility with
+other packages.
+</dd>
+<dt>Artifact</dt>
+<dd>
+A file produced by the build process, typically a source distribution
+(<code class="verbatim">.tar.gz</code>) or a wheel (<code class="verbatim">.whl</code>).
+</dd>
+<dt>Build Backend</dt>
+<dd>
+The tool that converts source code into installable artifacts (e.g.,
+<code class="verbatim">hatchling</code>, <code class="verbatim">meson-python</code>, <code class="verbatim">setuptools</code>, <code class="verbatim">uv_build</code>).
+</dd>
+<dt>Build Frontend</dt>
+<dd>
+The tool that invokes the build backend (e.g., <code class="verbatim">uv build</code>, <code class="verbatim">pip wheel</code>, <code class="verbatim">python -m build</code>).
+</dd>
+<dt>cibuildwheel</dt>
+<dd>
+A tool that builds binary wheels for multiple platforms using CI
+services such as GitHub Actions.
+</dd>
+<dt>Concrete Dependency</dt>
+<dd>
+An exact, pinned version of a package (e.g., <code class="verbatim">numpy==2.1.0</code>) as recorded in a lockfile,
+ensuring reproducibility.
+</dd>
+<dt><code class="verbatim">conda-forge</code></dt>
+<dd>
+A community-maintained channel of <code class="verbatim">conda</code>
+packages providing both Python libraries and system-level binaries.
+</dd>
+<dt>Constraint Satisfaction</dt>
+<dd>
+The process a package manager uses to find a set of dependency versions
+that simultaneously satisfy all requirements without conflicts.
+</dd>
+<dt>Continuous Integration (CI)</dt>
+<dd>
+The practice of automatically running tests and checks on every code
+push, typically using a service like GitHub Actions.
+</dd>
+<dt>Dependency Group</dt>
+<dd>
+A named set of dependencies in <code class="verbatim">pyproject.toml</code> (e.g., <code class="verbatim">dev</code>, <code class="verbatim">docs</code>) that
+can be installed selectively. Defined by PEP 735.
+</dd>
+<dt>Editable Install</dt>
+<dd>
+An installation mode (<code class="verbatim">uv pip install -e .</code>)
+where changes to source code are immediately reflected without
+reinstalling.
+</dd>
+<dt>F2PY</dt>
+<dd>
+A tool (part of NumPy) that generates Python bindings for Fortran
+subroutines, producing C wrapper code and shared objects.
+</dd>
+<dt>GitHub Actions</dt>
+<dd>
+A CI/CD platform integrated into GitHub that runs workflows defined in
+YAML files on push, pull request, or other events.
+</dd>
+<dt>Inline Script Metadata</dt>
+<dd>
+A PEP 723 feature that embeds dependency declarations directly in a
+Python script using a special comment block (<code class="verbatim"># /// script</code>).
+</dd>
+<dt>Lockfile</dt>
+<dd>
+A file (e.g., <code class="verbatim">uv.lock</code>) that pins the exact
+versions of all direct and transitive dependencies for reproducibility.
+</dd>
+<dt>Manylinux</dt>
+<dd>
+A standard that defines a minimal set of Linux system libraries a binary
+wheel may depend on, ensuring broad compatibility across distributions.
+</dd>
+<dt>Matrix Strategy</dt>
+<dd>
+A CI configuration that runs the same job across multiple combinations
+of parameters (e.g., Python versions and operating systems).
+</dd>
+<dt>Meson</dt>
+<dd>
+A build system used for compiling C, C++, and Fortran code into shared
+libraries. Used by NumPy and SciPy.
+</dd>
+<dt><code class="verbatim">meson-python</code></dt>
+<dd>
+A PEP 517 build backend that integrates the Meson build system with
+Python packaging, enabling compiled extensions in wheels.
+</dd>
+<dt>Module</dt>
+<dd>
+A single <code class="verbatim">.py</code> file that can be imported.
+</dd>
+<dt>News Fragment</dt>
+<dd>
+A small text file (e.g., <code class="verbatim">news/42.feature</code>)
+used by <code class="verbatim">towncrier</code> to record a single
+changelog entry, avoiding merge conflicts.
+</dd>
+<dt>OIDC (Trusted Publishing)</dt>
+<dd>
+An authentication method allowing GitHub Actions to publish to PyPI
+without storing API tokens, using OpenID Connect identity verification.
+</dd>
+<dt>Package</dt>
+<dd>
+A directory containing an <code class="verbatim">__init__.py</code> file
+(and usually other modules), making it importable as a unit.
+</dd>
+<dt>PEP</dt>
+<dd>
+Python Enhancement Proposal. A design document that describes a new
+feature or standard for Python. Key PEPs in this lesson: 518, 517, 621,
+668, 723, 735, 751.
+</dd>
+<dt><code class="verbatim">pixi</code></dt>
+<dd>
+A cross-platform package manager for managing system dependencies and
+task automation via <code class="verbatim">conda-forge</code>.
+</dd>
+<dt>Pixibang</dt>
+<dd>
+A shebang line (<code class="verbatim">#!/usr/bin/env -S pixi exec ... -- uv run</code>) that
+chains <code class="verbatim">pixi</code> and <code class="verbatim">uv</code> to provide both system binaries and Python
+packages for a single script.
+</dd>
+<dt><code class="verbatim">prek</code></dt>
+<dd>
+A Rust rewrite of the <code class="verbatim">pre-commit</code> tool for
+running git hooks that enforce code quality checks before commits.
+</dd>
+<dt>Pre-commit Hook</dt>
+<dd>
+A git hook that runs automated checks (linting, formatting) before a
+commit is finalized, preventing bad code from entering the repository.
+</dd>
+<dt><code class="verbatim">pyproject.toml</code></dt>
+<dd>
+The standard configuration file for Python projects (PEP 621), replacing
+<code class="verbatim">setup.py</code> and <code class="verbatim">setup.cfg</code>.
+</dd>
+<dt>PyPI</dt>
+<dd>
+The Python Package Index, the default repository for Python packages.
+</dd>
+<dt><code class="verbatim">pytest</code></dt>
+<dd>
+A testing framework for Python that discovers and runs test functions,
+providing detailed failure reports.
+</dd>
+<dt><code class="verbatim">ruff</code></dt>
+<dd>
+An extremely fast Python linter and formatter written in Rust, replacing
+<code class="verbatim">flake8</code>, <code class="verbatim">black</code>, and <code class="verbatim">isort</code>.
+</dd>
+<dt>Shadowing</dt>
+<dd>
+When a local file has the same name as a standard library module (e.g.,
+<code class="verbatim">math.py</code>), causing Python to import the
+local file instead.
+</dd>
+<dt>Shared Object</dt>
+<dd>
+A compiled binary (<code class="verbatim">.so</code> on Linux, <code class="verbatim">.dylib</code> on macOS, <code class="verbatim">.dll</code> on Windows) that Python can load as an
+extension module.
+</dd>
+<dt>Shebang</dt>
+<dd>
+The first line of a script (starting with <code class="verbatim">#!</code>) that tells the operating system which
+interpreter to use to execute the file.
+</dd>
+<dt>Source Distribution (sdist)</dt>
+<dd>
+A compressed archive of the source code (<code class="verbatim">.tar.gz</code>) that requires a build step before
+installation.
+</dd>
+<dt>Sphinx</dt>
+<dd>
+The standard documentation generator for Python projects, converting
+reStructuredText or Markdown into HTML, PDF, or other formats.
+</dd>
+<dt>
+<code class="verbatim">src</code> Layout</dt>
+<dd>
+A project structure where the package source lives under a <code class="verbatim">src/</code> directory, preventing accidental imports
+from the project root.
+</dd>
+<dt><code class="verbatim">sys.path</code></dt>
+<dd>
+The list of directories Python searches when resolving <code class="verbatim">import</code> statements.
+</dd>
+<dt>Test PyPI</dt>
+<dd>
+A separate instance of PyPI (<code class="verbatim">test.pypi.org</code>) used for testing package uploads
+without affecting the production index.
+</dd>
+<dt><code class="verbatim">towncrier</code></dt>
+<dd>
+A tool for managing changelogs using per-change fragment files to avoid
+merge conflicts.
+</dd>
+<dt>Transitive Dependency</dt>
+<dd>
+A package that is not directly required by your project but is pulled in
+as a dependency of one of your direct dependencies.
+</dd>
+<dt><code class="verbatim">uv</code></dt>
+<dd>
+A fast Python package installer and project manager from Astral, written
+in Rust.
+</dd>
+<dt><code class="verbatim">uvx</code></dt>
+<dd>
+A tool runner from <code class="verbatim">uv</code> that fetches and
+executes a command-line tool in an ephemeral environment without
+permanent installation.
+</dd>
+<dt>Virtual Environment</dt>
+<dd>
+An isolated Python environment with its own <code class="verbatim">site-packages</code> directory, preventing dependency
+conflicts between projects.
+</dd>
+<dt>Wheel</dt>
+<dd>
+A binary distribution format (<code class="verbatim">.whl</code>) that
+can be installed without a build step. It is essentially a ZIP archive
+with a standardized layout.
+</dd>
+</dl></div>
+<div class="section level1">
+<h1 id="key-commands">Key Commands<a class="anchor" aria-label="anchor" href="#key-commands"></a></h1>
+<div class="section level2">
+<h2 id="uv-commands">
+<code class="verbatim">uv</code> Commands<a class="anchor" aria-label="anchor" href="#uv-commands"></a></h2>
+<table class="table"><thead><tr><th align="left">Command</th>
+<th align="left">Description</th>
+</tr></thead><tbody><tr><td align="left"><code class="verbatim">uv init --lib</code></td>
+<td align="left">Create a new library project with <code class="verbatim">src</code> layout</td>
+</tr><tr><td align="left"><code class="verbatim">uv add &lt;package&gt;</code></td>
+<td align="left">Add a runtime dependency</td>
+</tr><tr><td align="left"><code class="verbatim">uv add --dev &lt;package&gt;</code></td>
+<td align="left">Add a development dependency</td>
+</tr><tr><td align="left"><code class="verbatim">uv add --group docs &lt;pkg&gt;</code></td>
+<td align="left">Add a dependency to a named group</td>
+</tr><tr><td align="left"><code class="verbatim">uv sync --dev</code></td>
+<td align="left">Install all dependencies including dev</td>
+</tr><tr><td align="left"><code class="verbatim">uv run &lt;command&gt;</code></td>
+<td align="left">Run a command in the project environment</td>
+</tr><tr><td align="left"><code class="verbatim">uv build</code></td>
+<td align="left">Build sdist and wheel into <code class="verbatim">dist/</code>
+</td>
+</tr><tr><td align="left"><code class="verbatim">uv pip install -e .</code></td>
+<td align="left">Install the project in editable mode</td>
+</tr><tr><td align="left"><code class="verbatim">uv python install 3.12</code></td>
+<td align="left">Install a specific Python version</td>
+</tr><tr><td align="left"><code class="verbatim">uvx twine upload dist/*</code></td>
+<td align="left">Upload artifacts to PyPI</td>
+</tr><tr><td align="left"><code class="verbatim">uvx &lt;tool&gt;</code></td>
+<td align="left">Run a tool in an ephemeral environment</td>
+</tr></tbody></table></div>
+<div class="section level2">
+<h2 id="pixi-commands">
+<code class="verbatim">pixi</code> Commands<a class="anchor" aria-label="anchor" href="#pixi-commands"></a></h2>
+<table class="table"><thead><tr><th align="left">Command</th>
+<th align="left">Description</th>
+</tr></thead><tbody><tr><td align="left"><code class="verbatim">pixi init</code></td>
+<td align="left">Initialize a new pixi project</td>
+</tr><tr><td align="left"><code class="verbatim">pixi add &lt;package&gt;</code></td>
+<td align="left">Add a conda dependency</td>
+</tr><tr><td align="left"><code class="verbatim">pixi run &lt;task&gt;</code></td>
+<td align="left">Run a defined task</td>
+</tr><tr><td align="left"><code class="verbatim">pixi exec --spec &lt;pkg&gt; -- &lt;cmd&gt;</code></td>
+<td align="left">Run a command with a package available</td>
+</tr></tbody></table></div>
+<div class="section level2">
+<h2 id="ruff-commands">
+<code class="verbatim">ruff</code> Commands<a class="anchor" aria-label="anchor" href="#ruff-commands"></a></h2>
+<table class="table"><thead><tr><th align="left">Command</th>
+<th align="left">Description</th>
+</tr></thead><tbody><tr><td align="left"><code class="verbatim">ruff check .</code></td>
+<td align="left">Lint the current directory</td>
+</tr><tr><td align="left"><code class="verbatim">ruff check --fix .</code></td>
+<td align="left">Lint and auto-fix issues</td>
+</tr><tr><td align="left"><code class="verbatim">ruff format .</code></td>
+<td align="left">Format code according to style rules</td>
+</tr><tr><td align="left"><code class="verbatim">ruff format --check .</code></td>
+<td align="left">Check formatting without modifying files</td>
+</tr></tbody></table></div>
+<div class="section level2">
+<h2 id="pytest-commands">
+<code class="verbatim">pytest</code> Commands<a class="anchor" aria-label="anchor" href="#pytest-commands"></a></h2>
+<table class="table"><thead><tr><th align="left">Command</th>
+<th align="left">Description</th>
+</tr></thead><tbody><tr><td align="left"><code class="verbatim">pytest</code></td>
+<td align="left">Run all tests in the <code class="verbatim">tests/</code> directory</td>
+</tr><tr><td align="left"><code class="verbatim">pytest --cov=src</code></td>
+<td align="left">Run tests with code coverage reporting</td>
+</tr><tr><td align="left"><code class="verbatim">pytest -v</code></td>
+<td align="left">Run tests with verbose output</td>
+</tr><tr><td align="left"><code class="verbatim">pytest tests/test_file.py</code></td>
+<td align="left">Run tests from a specific file</td>
+</tr></tbody></table></div>
+<div class="section level2">
+<h2 id="towncrier-commands">
+<code class="verbatim">towncrier</code> Commands<a class="anchor" aria-label="anchor" href="#towncrier-commands"></a></h2>
+<table class="table"><thead><tr><th align="left">Command</th>
+<th align="left">Description</th>
+</tr></thead><tbody><tr><td align="left"><code class="verbatim">towncrier create &lt;num&gt;.&lt;type&gt;</code></td>
+<td align="left">Create a changelog fragment (e.g., <code class="verbatim">1.feature</code>, <code class="verbatim">2.bugfix</code>)</td>
+</tr><tr><td align="left"><code class="verbatim">towncrier build --version X.Y.Z</code></td>
+<td align="left">Compile fragments into the changelog</td>
+</tr><tr><td align="left"><code class="verbatim">towncrier build --yes</code></td>
+<td align="left">Compile fragments without confirmation</td>
+</tr></tbody></table></div>
+<div class="section level2">
+<h2 id="prek-commands">
+<code class="verbatim">prek</code> Commands<a class="anchor" aria-label="anchor" href="#prek-commands"></a></h2>
+<table class="table"><thead><tr><th align="left">Command</th>
+<th align="left">Description</th>
+</tr></thead><tbody><tr><td align="left"><code class="verbatim">prek</code></td>
+<td align="left">Run all configured pre-commit hooks</td>
+</tr><tr><td align="left"><code class="verbatim">prek install</code></td>
+<td align="left">Install hooks into <code class="verbatim">.git/hooks/</code>
+</td>
+</tr></tbody></table></div>
+<div class="section level2">
+<h2 id="f2py-meson-commands">
+<code class="verbatim">f2py</code> / Meson Commands<a class="anchor" aria-label="anchor" href="#f2py-meson-commands"></a></h2>
+<table class="table"><thead><tr><th align="left">Command</th>
+<th align="left">Description</th>
+</tr></thead><tbody><tr><td align="left"><code class="verbatim">f2py -c file.f90 -m modname</code></td>
+<td align="left">Compile Fortran into a Python extension</td>
+</tr><tr><td align="left"><code class="verbatim">f2py -c file.f90 -m modname --build-dir out</code></td>
+<td align="left">Compile with intermediate files visible</td>
+</tr></tbody></table></div>
+<div class="section level2">
+<h2 id="sphinx-commands">Sphinx Commands<a class="anchor" aria-label="anchor" href="#sphinx-commands"></a></h2>
+<table class="table"><thead><tr><th align="left">Command</th>
+<th align="left">Description</th>
+</tr></thead><tbody><tr><td align="left"><code class="verbatim">sphinx-quickstart</code></td>
+<td align="left">Initialize a docs directory</td>
+</tr><tr><td align="left"><code class="verbatim">sphinx-build -b html docs/source docs/build/html</code></td>
+<td align="left">Build HTML documentation</td>
+</tr></tbody></table></div>
+</div>
+<div class="section level1">
+<h1 id="useful-links">Useful Links<a class="anchor" aria-label="anchor" href="#useful-links"></a></h1>
+<div class="section level2">
+<h2 id="core-standards">Core Standards<a class="anchor" aria-label="anchor" href="#core-standards"></a></h2>
+<ul><li><a href="https://packaging.python.org/" class="external-link">Python Packaging User
+Guide</a></li>
+<li><a href="https://packaging.python.org/en/latest/guides/writing-pyproject-toml/" class="external-link">Writing
+pyproject.toml</a></li>
+<li><a href="https://peps.python.org/pep-0517/" class="external-link">PEP 517: Build System
+Interface</a></li>
+<li><a href="https://peps.python.org/pep-0518/" class="external-link">PEP 518: Build System
+Requirements</a></li>
+<li><a href="https://peps.python.org/pep-0621/" class="external-link">PEP 621: Project
+Metadata</a></li>
+<li><a href="https://peps.python.org/pep-0723/" class="external-link">PEP 723: Inline Script
+Metadata</a></li>
+<li><a href="https://peps.python.org/pep-0735/" class="external-link">PEP 735: Dependency
+Groups</a></li>
+<li><a href="https://peps.python.org/pep-0751/" class="external-link">PEP 751: Lock Files
+(pylock.toml)</a></li>
+</ul></div>
+<div class="section level2">
+<h2 id="tools">Tools<a class="anchor" aria-label="anchor" href="#tools"></a></h2>
+<ul><li><a href="https://docs.astral.sh/uv/" class="external-link">uv Documentation</a></li>
+<li><a href="https://pixi.prefix.dev/" class="external-link">pixi Documentation</a></li>
+<li><a href="https://docs.astral.sh/ruff/" class="external-link">ruff Documentation</a></li>
+<li><a href="https://docs.pytest.org/" class="external-link">pytest Documentation</a></li>
+<li><a href="https://prek.j178.dev/cli/" class="external-link">prek Documentation</a></li>
+<li><a href="https://towncrier.readthedocs.io/" class="external-link">towncrier
+Documentation</a></li>
+<li><a href="https://www.sphinx-doc.org/" class="external-link">Sphinx Documentation</a></li>
+<li><a href="https://sphinx-autoapi.readthedocs.io/" class="external-link">sphinx-autoapi
+Documentation</a></li>
+</ul></div>
+<div class="section level2">
+<h2 id="build-systems">Build Systems<a class="anchor" aria-label="anchor" href="#build-systems"></a></h2>
+<ul><li><a href="https://mesonbuild.com/" class="external-link">Meson Build System</a></li>
+<li><a href="https://meson-python.readthedocs.io/" class="external-link">meson-python
+Documentation</a></li>
+<li><a href="https://numpy.org/doc/stable/f2py/" class="external-link">F2PY User Guide
+(NumPy)</a></li>
+<li><a href="https://cibuildwheel.pypa.io/" class="external-link">cibuildwheel
+Documentation</a></li>
+</ul></div>
+<div class="section level2">
+<h2 id="platforms">Platforms<a class="anchor" aria-label="anchor" href="#platforms"></a></h2>
+<ul><li><a href="https://test.pypi.org/" class="external-link">Test PyPI</a></li>
+<li><a href="https://pypi.org/" class="external-link">PyPI (Production)</a></li>
+<li><a href="https://docs.github.com/en/actions" class="external-link">GitHub Actions
+Documentation</a></li>
+<li><a href="https://github.com/astral-sh/setup-uv" class="external-link">astral-sh/setup-uv
+Action</a></li>
+</ul><!--
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
- -->
-</section></div> <!-- / div.lesson-content -->
+ --></div>
+</div>
+
+
+
+      </div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter"><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="../instructor/index.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
         <a class="chapter-link float-end" href="../instructor/index.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
@@ -395,8 +821,8 @@ any links that you are not going to use.
   "url": "https://HaoZeke.github.io/python_packaging_workbench/instructor/reference.html",
   "identifier": "https://HaoZeke.github.io/python_packaging_workbench/instructor/reference.html",
   "dateCreated": "2026-02-10",
-  "dateModified": "2023-03-16",
-  "datePublished": "2026-02-12"
+  "dateModified": "2026-02-15",
+  "datePublished": "2026-02-15"
 }
 
   </script><script>

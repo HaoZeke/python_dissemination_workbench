@@ -304,7 +304,31 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="compiled_extensions.html">6. Compiled Extensions: The Shared Object Pipeline</a>
+        <a href="documentation.html">6. If It Isn't Documented, It Doesn't Exist</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush8">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading8">
+        <a href="ci_cd.html">7. The Gatekeeper: Continuous Integration</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush9">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading9">
+        <a href="compiled_extensions.html">8. Compiled Extensions: The Shared Object Pipeline</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -368,11 +392,459 @@
         <h1>Instructor Notes</h1>
         
 
-<p>This is a placeholder file. Please add content here.</p>
+<div class="section level1">
+<h1 id="overall-lesson-design">Overall Lesson Design<a class="anchor" aria-label="anchor" href="#overall-lesson-design"></a>
+</h1>
+<p>This lesson follows a progressive arc from standalone scripts to
+published packages with compiled extensions. Each episode builds on the
+previous one, so it is important to teach them in order. The full lesson
+spans eight episodes with approximately 3 hours of instruction plus 1.5
+hours of exercises, suitable for a full-day workshop. A half-day
+workshop can cover the first five episodes (through Release
+Engineering), with the remaining three assigned as self-study.</p>
+<p>The running example is a small computational chemistry library (<code class="verbatim">chemlib</code>) that evolves from a single script into
+a full package with Fortran extensions. You do not need domain expertise
+to teach this lesson; the chemistry content is deliberately minimal and
+serves only as a realistic motivating example.</p>
+</div>
+<div class="section level1">
+<h1 id="before-the-workshop">Before the Workshop<a class="anchor" aria-label="anchor" href="#before-the-workshop"></a>
+</h1>
+<ul>
+<li>Ensure learners have <code class="verbatim">pixi</code> and <code class="verbatim">uv</code> installed (see the Setup page).</li>
+<li>Ask learners to create a <a href="https://test.pypi.org/account/register/" class="external-link">Test PyPI</a> account
+before arriving.</li>
+<li>Have a working internet connection; several episodes download
+packages.</li>
+<li>Pre-download the example data files if you expect connectivity
+issues.</li>
+</ul>
+</div>
+<div class="section level1">
+<h1 id="episode-specific-notes">Episode-Specific Notes<a class="anchor" aria-label="anchor" href="#episode-specific-notes"></a>
+</h1>
+<div class="section level2">
+<h2 id="writing-reproducible-python-20-min-teaching-10-min-exercises">Writing Reproducible Python (20 min teaching / 10 min
+exercises)<a class="anchor" aria-label="anchor" href="#writing-reproducible-python-20-min-teaching-10-min-exercises"></a>
+</h2>
+<ul>
+<li>Start by asking learners how they currently share scripts. This
+surfaces the pain points that the lesson addresses.</li>
+<li>The inline script metadata (PEP 723) feature requires <code class="verbatim">uv</code> and may be unfamiliar even to experienced
+Python users. Emphasize that this is a new standard and not yet widely
+adopted.</li>
+<li>The <code class="verbatim">pixi</code> task runner integration is
+optional but useful for showing how system-level dependencies (like
+<code class="verbatim">ase</code>) can be pinned alongside Python
+dependencies.</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="modules-packages-and-the-search-path-15-min-teaching-5-min-exercises">Modules, Packages, and The Search Path (15 min teaching / 5 min
+exercises)<a class="anchor" aria-label="anchor" href="#modules-packages-and-the-search-path-15-min-teaching-5-min-exercises"></a>
+</h2>
+<ul>
+<li>Learners often confuse “module” (a single <code class="verbatim">.py</code> file) with “package” (a directory with <code class="verbatim">__init__.py</code>). Draw the distinction clearly.</li>
+<li>The <code class="verbatim">sys.path</code> inspection is the key
+conceptual moment. Have learners run it interactively and compare
+outputs.</li>
+<li>Common misconception: learners may believe <code class="verbatim">import</code> searches the entire filesystem. Clarify
+that it only searches <code class="verbatim">sys.path</code>
+entries.</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="the-project-standard-pyproject-toml-20-min-teaching-10-min-exercises">The Project Standard: pyproject.toml (20 min teaching / 10 min
+exercises)<a class="anchor" aria-label="anchor" href="#the-project-standard-pyproject-toml-20-min-teaching-10-min-exercises"></a>
+</h2>
+<ul>
+<li>This is the densest episode. Consider a short break before it.</li>
+<li>The <code class="verbatim">src</code> layout is non-obvious to
+beginners. Explain that it prevents accidental imports from the working
+directory instead of the installed package.</li>
+<li>Walk through the <code class="verbatim">uv init</code> output
+slowly; there is a lot of generated content.</li>
+<li>If learners ask about <code class="verbatim">setup.py</code> or
+<code class="verbatim">setup.cfg</code>, acknowledge them as legacy
+approaches and redirect to <code class="verbatim">pyproject.toml</code>
+as the current standard (PEP 621).</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="quality-assurance-testing-and-linting-20-min-teaching-10-min-exercises">Quality Assurance: Testing and Linting (20 min teaching / 10 min
+exercises)<a class="anchor" aria-label="anchor" href="#quality-assurance-testing-and-linting-20-min-teaching-10-min-exercises"></a>
+</h2>
+<ul>
+<li>Learners often resist testing because their code “works.” Frame
+testing as a way to save time when refactoring or onboarding new
+collaborators.</li>
+<li>
+<code class="verbatim">ruff</code> is fast enough to run live.
+Consider showing a side-by-side of before/after formatting.</li>
+<li>The <code class="verbatim">--dev</code> flag for development
+dependencies is a critical concept. Make sure learners understand why
+linters and test frameworks should not be runtime dependencies.</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="release-engineering-logs-and-artifacts-25-min-teaching-15-min-exercises">Release Engineering: Logs and Artifacts (25 min teaching / 15 min
+exercises)<a class="anchor" aria-label="anchor" href="#release-engineering-logs-and-artifacts-25-min-teaching-15-min-exercises"></a>
+</h2>
+<ul>
+<li>The <code class="verbatim">towncrier</code> fragment workflow may
+feel heavyweight for small projects. Acknowledge this and explain that
+it scales well for multi-contributor projects.</li>
+<li>Publishing to Test PyPI is the highlight of this episode. Have
+learners actually publish and then install each other’s packages if time
+permits.</li>
+<li>Common issue: package name collisions on Test PyPI. Have learners
+use unique suffixes (e.g., <code class="verbatim">chemlib-&lt;username&gt;</code>).</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="if-it-isnt-documented-it-doesnt-exist-25-min-teaching-15-min-exercises">If It Isn’t Documented, It Doesn’t Exist (25 min teaching / 15 min
+exercises)<a class="anchor" aria-label="anchor" href="#if-it-isnt-documented-it-doesnt-exist-25-min-teaching-15-min-exercises"></a>
+</h2>
+<p>This episode focuses on docstrings and Sphinx. It assumes learners
+already have a working, tested package with a release pipeline.</p>
+<ul>
+<li>Start with docstrings, not Sphinx. The “write a NumPy-style
+docstring” exercise gives learners an immediate, tangible skill even if
+they never set up Sphinx.</li>
+<li>Sphinx configuration can feel overwhelming. The episode uses a
+minimal <code class="verbatim">conf.py</code> with only three
+extensions: <code class="verbatim">autoapi</code>, <code class="verbatim">viewcode</code>, and <code class="verbatim">intersphinx</code>. Resist the urge to add more.</li>
+<li>The Shibuya theme is recommended for its clean modern look, but any
+theme works. If learners prefer Read the Docs, that is fine.</li>
+<li>The <code class="verbatim">intersphinx</code> challenge is a “wow”
+moment for many learners. Show how a <code class="verbatim">:class:`numpy.ndarray`</code> reference in a docstring
+automatically becomes a hyperlink to the NumPy documentation.</li>
+<li>Common issue: the <code class="verbatim">sys.path.insert</code> line
+in <code class="verbatim">conf.py</code> must point to the correct
+relative path for your <code class="verbatim">src</code> directory. If
+<code class="verbatim">autoapi</code> finds zero modules, this is almost
+always the cause.</li>
+<li>The GitHub Pages deployment section introduces GitHub Actions
+workflow files. Keep it brief; the next episode (CI) covers workflow
+files in full detail.</li>
+<li>The PR preview subsection uses a two-workflow pattern (build +
+comment). If learners ask why, explain the security model: the build
+runs with the PR author’s limited permissions, while the comment
+workflow runs with write access only after a successful build. This
+prevents malicious PRs from exploiting elevated permissions.</li>
+<li>If time is short, the PR preview can be skipped or shown as a demo.
+The core value of the episode is docstrings + Sphinx + autoapi.</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="the-gatekeeper-continuous-integration-20-min-teaching-10-min-exercises">The Gatekeeper: Continuous Integration (20 min teaching / 10 min
+exercises)<a class="anchor" aria-label="anchor" href="#the-gatekeeper-continuous-integration-20-min-teaching-10-min-exercises"></a>
+</h2>
+<p>This episode follows naturally from Quality Assurance (local hooks)
+and Release Engineering (manual publishing). It closes the loop by
+automating both. Learners will have already seen a workflow file in the
+Documentation episode, so the YAML structure should not be entirely
+new.</p>
+<ul>
+<li>Many learners will not have used GitHub Actions before. Start by
+explaining the YAML structure: <code class="verbatim">on</code>
+(triggers), <code class="verbatim">jobs</code> (what runs), <code class="verbatim">steps</code> (how). The episode includes a “Reading the
+Workflow” challenge for this purpose.</li>
+<li>The <code class="verbatim">astral-sh/setup-uv</code> action is the
+recommended way to install <code class="verbatim">uv</code> in CI.
+Emphasize the <code class="verbatim">enable-cache: true</code> flag,
+which dramatically speeds up repeated runs.</li>
+<li>Build up from a single-OS pipeline to the matrix. This avoids
+overwhelming learners with the full YAML in one go.</li>
+<li>The matrix strategy is the key concept. Show the math: 2 Python
+versions x 3 operating systems = 6 parallel jobs. This is where CI earns
+its keep.</li>
+<li>The release job at the end ties back to <code class="verbatim">uvx twine</code> from Release Engineering. Emphasize
+that <code class="verbatim">needs: check</code> means a broken build is
+never published.</li>
+<li>Common issue: Windows path separators. If a learner has hardcoded
+<code class="verbatim">/</code> in file paths, the Windows job will
+fail. This loops back to <code class="verbatim">pathlib</code> from the
+very first episode.</li>
+<li>If time is short, skip the matrix and just show the basic single-OS
+pipeline. The matrix can be assigned as homework.</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="compiled-extensions-the-shared-object-pipeline-35-min-teaching-15-min-exercises">Compiled Extensions: The Shared Object Pipeline (35 min teaching /
+15 min exercises)<a class="anchor" aria-label="anchor" href="#compiled-extensions-the-shared-object-pipeline-35-min-teaching-15-min-exercises"></a>
+</h2>
+<p>This is the most advanced episode and serves as the capstone of the
+lesson. By this point learners have the full toolchain (packaging,
+testing, docs, CI) and are ready to tackle the binary distribution
+problem.</p>
+<ul>
+<li>Gauge the audience and consider making it optional for a shorter
+workshop.</li>
+<li>Learners without Fortran experience should not worry; the Fortran
+code is provided and the focus is on the build pipeline, not the
+language.</li>
+<li>The <code class="verbatim">meson-python</code> backend is less
+common than <code class="verbatim">setuptools</code>. Explain that it
+exists specifically for compiled code and is used by <code class="verbatim">numpy</code> and <code class="verbatim">scipy</code>.</li>
+<li>
+<code class="verbatim">cibuildwheel</code> can take a long time to
+run in CI. Consider showing pre-recorded output if live demos are not
+feasible. Learners now understand CI from the previous episode, so the
+<code class="verbatim">cibuildwheel</code> matrix diagram should feel
+familiar.</li>
+<li>The “manual install” challenge (copying <code class="verbatim">.so</code> into <code class="verbatim">site-packages</code>) is deliberately low-level. It
+demystifies what <code class="verbatim">pip install</code> actually does
+under the hood and helps learners appreciate why build tools exist.</li>
+<li>If a learner’s system lacks a Fortran compiler, they can still
+follow along conceptually; the <code class="verbatim">f2py</code> output
+is shown in the lesson.</li>
+</ul>
+</div>
+</div>
+<div class="section level1">
+<h1 id="suggested-workshop-schedules">Suggested Workshop Schedules<a class="anchor" aria-label="anchor" href="#suggested-workshop-schedules"></a>
+</h1>
+<div class="section level2">
+<h2 id="half-day-workshop-3-5-hours-episodes-1-5">Half-Day Workshop (3.5 hours, episodes 1-5)<a class="anchor" aria-label="anchor" href="#half-day-workshop-3-5-hours-episodes-1-5"></a>
+</h2>
+<table class="table">
+<thead><tr>
+<th align="left">Time</th>
+<th align="left">Activity</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="left">09:00 - 09:30</td>
+<td align="left">Reproducible Python (Scripts)</td>
+</tr>
+<tr>
+<td align="left">09:30 - 09:50</td>
+<td align="left">Modules and the Search Path</td>
+</tr>
+<tr>
+<td align="left">09:50 - 10:00</td>
+<td align="left"><strong>Break</strong></td>
+</tr>
+<tr>
+<td align="left">10:00 - 10:30</td>
+<td align="left">pyproject.toml with uv</td>
+</tr>
+<tr>
+<td align="left">10:30 - 11:00</td>
+<td align="left">Quality Assurance</td>
+</tr>
+<tr>
+<td align="left">11:00 - 11:10</td>
+<td align="left"><strong>Break</strong></td>
+</tr>
+<tr>
+<td align="left">11:10 - 11:50</td>
+<td align="left">Release Engineering</td>
+</tr>
+<tr>
+<td align="left">11:50 - 12:30</td>
+<td align="left">Q&amp;A / Apply to your own project</td>
+</tr>
+</tbody>
+</table>
+<p>This covers the core “script to published package” arc.
+Documentation, CI, and Compiled Extensions can be assigned as self-study
+or covered in a follow-up session.</p>
+</div>
+<div class="section level2">
+<h2 id="shorter-session-2-hours-episodes-1-4">Shorter Session (2 hours, episodes 1-4)<a class="anchor" aria-label="anchor" href="#shorter-session-2-hours-episodes-1-4"></a>
+</h2>
+<p>Cover Scripts through Quality Assurance. This gives learners a
+complete workflow from script to tested package and can be done without
+internet access (no publishing step).</p>
+</div>
+<div class="section level2">
+<h2 id="full-day-workshop-all-8-episodes">Full-Day Workshop (all 8 episodes)<a class="anchor" aria-label="anchor" href="#full-day-workshop-all-8-episodes"></a>
+</h2>
+<table class="table">
+<thead><tr>
+<th align="left">Time</th>
+<th align="left">Activity</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="left">09:00 - 09:30</td>
+<td align="left">Reproducible Python (Scripts)</td>
+</tr>
+<tr>
+<td align="left">09:30 - 09:50</td>
+<td align="left">Modules and the Search Path</td>
+</tr>
+<tr>
+<td align="left">09:50 - 10:00</td>
+<td align="left"><strong>Break</strong></td>
+</tr>
+<tr>
+<td align="left">10:00 - 10:30</td>
+<td align="left">pyproject.toml with uv</td>
+</tr>
+<tr>
+<td align="left">10:30 - 11:00</td>
+<td align="left">Quality Assurance</td>
+</tr>
+<tr>
+<td align="left">11:00 - 11:10</td>
+<td align="left"><strong>Break</strong></td>
+</tr>
+<tr>
+<td align="left">11:10 - 11:50</td>
+<td align="left">Release Engineering</td>
+</tr>
+<tr>
+<td align="left">11:50 - 12:30</td>
+<td align="left">Documentation</td>
+</tr>
+<tr>
+<td align="left">12:30 - 13:30</td>
+<td align="left"><strong>Lunch</strong></td>
+</tr>
+<tr>
+<td align="left">13:30 - 14:00</td>
+<td align="left">Continuous Integration</td>
+</tr>
+<tr>
+<td align="left">14:00 - 14:50</td>
+<td align="left">Compiled Extensions</td>
+</tr>
+<tr>
+<td align="left">14:50 - 15:00</td>
+<td align="left"><strong>Break</strong></td>
+</tr>
+<tr>
+<td align="left">15:00 - 15:30</td>
+<td align="left">Apply to your own project (Q&amp;A)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section level1">
+<h1 id="timing-guide">Timing Guide<a class="anchor" aria-label="anchor" href="#timing-guide"></a>
+</h1>
+<table class="table">
+<thead><tr>
+<th align="left">Episode</th>
+<th align="left">Teaching</th>
+<th align="left">Exercises</th>
+<th align="left">Total</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="left">Reproducible Python</td>
+<td align="left">20 min</td>
+<td align="left">10 min</td>
+<td align="left">30 min</td>
+</tr>
+<tr>
+<td align="left">Modules</td>
+<td align="left">15 min</td>
+<td align="left">5 min</td>
+<td align="left">20 min</td>
+</tr>
+<tr>
+<td align="left">pyproject.toml &amp; uv</td>
+<td align="left">20 min</td>
+<td align="left">10 min</td>
+<td align="left">30 min</td>
+</tr>
+<tr>
+<td align="left">Quality Assurance</td>
+<td align="left">20 min</td>
+<td align="left">10 min</td>
+<td align="left">30 min</td>
+</tr>
+<tr>
+<td align="left">Release Engineering</td>
+<td align="left">25 min</td>
+<td align="left">15 min</td>
+<td align="left">40 min</td>
+</tr>
+<tr>
+<td align="left">Documentation</td>
+<td align="left">25 min</td>
+<td align="left">15 min</td>
+<td align="left">40 min</td>
+</tr>
+<tr>
+<td align="left">Continuous Integration</td>
+<td align="left">20 min</td>
+<td align="left">10 min</td>
+<td align="left">30 min</td>
+</tr>
+<tr>
+<td align="left">Compiled Extensions</td>
+<td align="left">35 min</td>
+<td align="left">15 min</td>
+<td align="left">50 min</td>
+</tr>
+<tr>
+<td align="left"><strong>Total</strong></td>
+<td align="left"><strong>180 min</strong></td>
+<td align="left"><strong>90 min</strong></td>
+<td align="left"><strong>270 min</strong></td>
+</tr>
+</tbody>
+</table>
+<p>For a half-day workshop (3.5 hours with breaks), the first five
+episodes (through Release Engineering) fit comfortably. For a shorter
+session, stop after Quality Assurance. For a full-day workshop, cover
+all eight episodes with Documentation and CI in the late morning and
+Compiled Extensions after lunch.</p>
+</div>
+<div class="section level1">
+<h1 id="common-pitfalls">Common Pitfalls<a class="anchor" aria-label="anchor" href="#common-pitfalls"></a>
+</h1>
+<ul>
+<li>Learners on Windows may have PATH issues with <code class="verbatim">pixi</code> and <code class="verbatim">uv</code> after
+installation. Have them restart their terminal.</li>
+<li>Virtual environment confusion: some learners may have <code class="verbatim">conda</code> environments active that interfere with
+<code class="verbatim">uv</code>. Ask them to deactivate first.</li>
+<li>The <code class="verbatim">editable install</code> concept (<code class="verbatim">uv pip install -e .</code>) is powerful but can confuse
+learners who expect changes to require reinstallation. Clarify when
+editable installs do and do not pick up changes (new files require
+reinstall).</li>
+<li>TestPyPI name collisions: package names are global. Have learners
+append a unique suffix (e.g., <code class="verbatim">chemlib-&lt;username&gt;</code>) to avoid
+conflicts.</li>
+<li>Fortran compiler availability: not all systems have <code class="verbatim">gfortran</code> installed. On macOS, learners may need
+to install it via <code class="verbatim">brew install gcc</code> or use
+<code class="verbatim">pixi</code> to provide it. On Windows, <code class="verbatim">pixi</code> is the recommended path.</li>
+<li>The <code class="verbatim">uv run</code> vs <code class="verbatim">python</code> distinction trips up learners who are
+used to activating virtual environments. Emphasize that <code class="verbatim">uv run</code> is the “batteries included” way to
+execute code in the project’s environment.</li>
+<li>If GitHub Actions workflows do not trigger, check that the YAML file
+is in the default branch and that the file is valid YAML (indentation
+matters).</li>
+<li>
+<code class="verbatim">ruff</code> version pinning: the <code class="verbatim">.pre-commit-config.yaml</code> pins a <code class="verbatim">ruff</code> version. If learners see different lint
+results locally vs in CI, version mismatch is usually the cause.</li>
+</ul>
+</div>
+<div class="section level1">
+<h1 id="accessibility-and-inclusivity">Accessibility and Inclusivity<a class="anchor" aria-label="anchor" href="#accessibility-and-inclusivity"></a>
+</h1>
+<ul>
+<li>All diagrams in the lesson have alt-text descriptions. If projecting
+slides, read the diagram aloud for visually impaired learners.</li>
+<li>The lesson uses colour-coded diagrams. Ensure your projector has
+adequate contrast, and point out the labels rather than relying on
+colour alone.</li>
+<li>Terminal font size: increase your terminal font to at least 18pt
+when live-coding so learners at the back can follow along.</li>
+<li>Provide the example data files on a USB stick or shared drive if
+connectivity is unreliable.</li>
+</ul>
 <!--
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  -->
+</div>
 
 
       <section id="aggregate-instructor-notes"></section>
@@ -425,8 +897,8 @@ any links that you are not going to use.
   "url": "https://HaoZeke.github.io/python_packaging_workbench/instructor-notes.html",
   "identifier": "https://HaoZeke.github.io/python_packaging_workbench/instructor-notes.html",
   "dateCreated": "2026-02-10",
-  "dateModified": "2026-02-12",
-  "datePublished": "2026-02-12"
+  "dateModified": "2026-02-15",
+  "datePublished": "2026-02-15"
 }
 
   </script><script>

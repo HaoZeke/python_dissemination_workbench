@@ -16,10 +16,16 @@
     <loc>https://HaoZeke.github.io/python_packaging_workbench/aio.html</loc>
   </url>
   <url>
+    <loc>https://HaoZeke.github.io/python_packaging_workbench/ci_cd.html</loc>
+  </url>
+  <url>
     <loc>https://HaoZeke.github.io/python_packaging_workbench/citation.html</loc>
   </url>
   <url>
     <loc>https://HaoZeke.github.io/python_packaging_workbench/compiled_extensions.html</loc>
+  </url>
+  <url>
+    <loc>https://HaoZeke.github.io/python_packaging_workbench/documentation.html</loc>
   </url>
   <url>
     <loc>https://HaoZeke.github.io/python_packaging_workbench/images.html</loc>
@@ -43,10 +49,16 @@
     <loc>https://HaoZeke.github.io/python_packaging_workbench/instructor/aio.html</loc>
   </url>
   <url>
+    <loc>https://HaoZeke.github.io/python_packaging_workbench/instructor/ci_cd.html</loc>
+  </url>
+  <url>
     <loc>https://HaoZeke.github.io/python_packaging_workbench/instructor/citation.html</loc>
   </url>
   <url>
     <loc>https://HaoZeke.github.io/python_packaging_workbench/instructor/compiled_extensions.html</loc>
+  </url>
+  <url>
+    <loc>https://HaoZeke.github.io/python_packaging_workbench/instructor/documentation.html</loc>
   </url>
   <url>
     <loc>https://HaoZeke.github.io/python_packaging_workbench/instructor/images.html</loc>
