@@ -272,9 +272,9 @@ Success: .../uv/.../site-packages/chemlib/init.py
 #+end_caution
 
 We can teach GitHub to do this for us. We use *Trusted Publishing (OIDC)* so we
-don't even need to copy-paste passwords.
-
-Add a =release= job to your =.github/workflows/ci.yml=:
+don't even need to copy-paste passwords. The CI episode will cover GitHub
+Actions in full detail; for now, here is a preview of what an automated release
+job looks like:
 
 #+begin_src yaml
   release:
