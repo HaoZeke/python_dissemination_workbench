@@ -79,9 +79,11 @@ episodes:
 
 # Information for Learners
 learners:
+  - reference.md
 
 # Information for Instructors
 instructors:
+  - instructor-notes.md
 
 # Learner Profiles
 profiles:
