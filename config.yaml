@@ -87,6 +87,7 @@ instructors:
 
 # Learner Profiles
 profiles:
+  - learner-profiles.md
 
 # Customisation ---------------------------------------------
 #
