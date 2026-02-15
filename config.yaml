@@ -75,16 +75,21 @@ episodes:
   - pyproject_uv.md
   - quality_assurance.md
   - release_engineering.md
+  - documentation.md
+  - ci_cd.md
   - compiled_extensions.md
 
 # Information for Learners
 learners:
+  - reference.md
 
 # Information for Instructors
 instructors:
+  - instructor-notes.md
 
 # Learner Profiles
 profiles:
+  - learner-profiles.md
 
 # Customisation ---------------------------------------------
 #
