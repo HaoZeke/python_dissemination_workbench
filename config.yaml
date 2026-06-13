@@ -42,7 +42,7 @@ branch: "main"
 # Who to contact if there are any issues
 contact: "rgoswami@ieee.org"
 
-# Antics
+# Public page-view analytics
 analytics: |
   <script defer src="https://antics-api.turtletech.us/antics.js"></script>
 
